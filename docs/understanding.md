@@ -2,7 +2,8 @@
 
 ## Goal
 
-Define the Go service track clearly before writing service code.
+Define the Go service track clearly while keeping the early developer work focused on pure Go
+implementation.
 
 The `payment-api` service will be the high-volume REST boundary for payment operations. It should
 be fast, operationally simple, and easy to deploy, while relying on Rust crates for financial
@@ -65,9 +66,13 @@ Do not add these until explicitly scoped:
 - container or Kubernetes deployment.
 - Rust FFI, WASM, or sidecar integration.
 
-## First Implementation Direction
+## Initial Implementation Direction
 
-The first Go implementation should establish a minimal service skeleton only after the boundary is
-reviewed. The first endpoint should probably be a health/readiness endpoint, not payment creation,
-because it teaches service layout and validation discipline without pretending the payment workflow
-is ready for public traffic.
+Early GitHub issues should be pure Go implementation tasks. Contract documents, OpenAPI
+generation, API specification ownership, and broader test-contract strategy will be decided later
+when the service shape is mature enough.
+
+The first Go implementation should establish a minimal service skeleton with health and readiness
+behavior. It should not implement payment creation yet, because that would force API contract,
+domain, persistence, idempotency, and processor decisions before the service boundary has earned
+them through smaller working code.

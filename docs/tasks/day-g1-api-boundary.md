@@ -1,8 +1,8 @@
-# Day G1: Payment API Boundary Contract
+# Day G1: Minimal Go Service Health Boundary
 
 ## Goal
 
-Define what the Go `payment-api` service is responsible for before any service code is written.
+Create the first minimal Go service boundary without implementing payment business logic.
 
 ## Real Problem
 
@@ -13,42 +13,38 @@ financial truth already owned by Rust libraries.
 
 ## Learning Target
 
-- Go service boundaries.
-- REST responsibility versus domain responsibility.
-- Request validation categories.
-- Error mapping from domain errors to HTTP responses.
-- Keeping architecture documentation useful enough for another developer.
+- Go module layout.
+- HTTP handler structure.
+- Health and readiness endpoints.
+- Table-driven handler tests.
+- Keeping a service task small enough for review.
 
 ## Task
 
-Write the first API boundary contract before code.
+Implement a minimal Go HTTP service.
 
-The document should answer:
+The implementation should include:
 
-- What kinds of requests will `payment-api` eventually receive?
-- Which validation belongs in Go?
-- Which validation belongs in Rust?
-- Which errors should become client errors?
-- Which errors should become server or dependency errors?
-- What should be explicitly out of scope for the first implementation day?
+- a Go module.
+- a small service entry point.
+- `GET /healthz` for liveness.
+- `GET /readyz` for readiness.
+- simple JSON responses.
+- table-driven tests for both endpoints.
 
 ## Expected Outcome
 
-By the end of this task, another developer should understand:
+By the end of this task, another developer should have a tiny running service that proves:
 
-- why this service exists.
-- what Go is allowed to decide locally.
-- what Go must delegate to Rust/domain libraries.
-- what the first safe implementation task should be.
-- why payment creation should not be implemented before the service boundary is agreed.
+- the repository compiles as a Go project.
+- the service can be run locally.
+- health and readiness behavior is tested.
+- payment behavior is still intentionally absent.
 
 ## Out Of Scope
 
 Do not implement:
 
-- Go module or HTTP server.
-- endpoints.
-- middleware.
 - database access.
 - authentication.
 - idempotency storage.
@@ -57,17 +53,16 @@ Do not implement:
 - Rust integration.
 - OpenAPI generation.
 - Docker or deployment files.
+- payment creation, capture, cancellation, refund, dispute, settlement, or reconciliation.
 
 ## Validation
 
-- The boundary document is clear enough for another developer to start from it.
-- The document keeps Go service orchestration separate from Rust financial truth.
-- The next task is small, concrete, and implementation-ready.
-- No executable service code is added in Day G1.
+- `go test ./...` passes.
+- Health and readiness endpoints return expected status codes and JSON.
+- The pull request explains implementation choices briefly in the PR description.
+- No payment business endpoint is added.
 
 ## Suggested Day G2
 
-Create a minimal Go service skeleton with health and readiness endpoints only.
-
-Day G2 should still avoid payment creation. Its job is to establish layout, basic routing,
-configuration loading shape, graceful shutdown, and validation tooling.
+Add graceful shutdown, request timeouts, and a small configuration shape without introducing
+payment operations.
