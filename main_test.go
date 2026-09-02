@@ -9,41 +9,52 @@ import (
 func TestHealthHandler(t *testing.T) {
 	// the below are table tests
 	tests := []struct {
+		// This is the structure of test case
 		name           string
+		method         string
 		expectedStatus int
 		expectedBody   string
 	}{
-		{
+		{ // trst case 1
 			name:           "returns healthy response",
+			method:         http.MethodGet,
 			expectedStatus: http.StatusOK,
 			expectedBody:   `{"status":"ok"}`,
 		},
+		{ // Test case 2
+			name:           "rejects non GET request",
+			method:         http.MethodPost,
+			expectedStatus: http.StatusMethodNotAllowed,
+		},
 	}
+
+	router := newRouter()
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodGet, "/healthz", nil)   // create a new fake request
-			rec := httptest.NewRecorder()                                 // records this response
+	t.Run(tt.name, func(t *testing.T) {
+		req := httptest.NewRequest(tt.method, "/healthz", nil)
+		rec := httptest.NewRecorder()
 
-			healthHandler(rec, req)
+		router.ServeHTTP(rec, req)
 
-			if rec.Code != tt.expectedStatus {
-				t.Fatalf(
-					"expected status %d, got %d",
-					tt.expectedStatus,
-					rec.Code,
-				)
-			}
+		if rec.Code != tt.expectedStatus {
+			t.Fatalf(
+				"expected status %d, got %d",
+				tt.expectedStatus,
+				rec.Code,
+			)
+		}
 
-			if rec.Body.String() != tt.expectedBody+"\n" {
-				t.Fatalf(
-					"expected body %q, got %q",
-					tt.expectedBody+"\n",
-					rec.Body.String(),
-				)
-			}
-		})
-	}
+		if tt.expectedBody != "" &&
+			rec.Body.String() != tt.expectedBody+"\n" {
+			t.Fatalf(
+				"expected body %q, got %q",
+				tt.expectedBody+"\n",
+				rec.Body.String(),
+			)
+		}
+	})
+}
 }
 
 func TestReadyHandler(t *testing.T) {

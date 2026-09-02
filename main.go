@@ -26,11 +26,17 @@ func readyHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func main() {
-	mux := http.NewServeMux()
+func newRouter() *http.ServeMux {
+	mux := http.NewServeMux()   // new router is created
 
-	mux.HandleFunc("/healthz", healthHandler)
-	mux.HandleFunc("/readyz", readyHandler)
+	mux.HandleFunc("GET /healthz", healthHandler)
+	mux.HandleFunc("GET /readyz", readyHandler)
+
+	return mux
+}
+
+func main() {
+	mux := newRouter()
 
 	log.Println("payment-api listening on :8080")
 
