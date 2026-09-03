@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -26,9 +29,23 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatal("G2 Gin server failed : %v ", err)
+	go serverRunner(server) // this is a go routine ans it will carry its work in seperate thread
+
+	// creating signals
+
+	shutdown, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+	<-shutdown.Done()
+
+	fmt.Println("Shutting down server")
+
+	if err := server.Shutdown(context.Background()); err != nil {
+		fmt.Println("Shutdown with Error -----")
+		log.Fatal("Server shutdown failed:", err)
+
 	}
+
+	fmt.Println("Shutdown completee")
 
 	// if err := router.Run() ; err != nil {
 	// 	log.Fatal("G2 Gin server failed : %v " , err)
@@ -58,4 +75,11 @@ func postRequestHandler(context *gin.Context) {
 		"email": customRequestObject.Email,
 		"name":  customRequestObject.Name,
 	})
+}
+
+func serverRunner(server *http.Server) {
+	if err := server.ListenAndServe(); err != nil {
+		fmt.Println("Server is shutting down as it is closed noe \n ")
+		log.Fatal("G2 Gin server failed : %v ", err)
+	}
 }
