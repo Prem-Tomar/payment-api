@@ -1,47 +1,56 @@
 package main
 
 import (
-	"encoding/json"
+	
+	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/Prem-Tomar/payment-api/internal/httpapi"
 )
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	response := map[string]string{
-		"status": "ok",
-	}
-
-	json.NewEncoder(w).Encode(response)
-}
-
-func readyHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	response := map[string]string{
-		"status": "ready",
-	}
-
-	json.NewEncoder(w).Encode(response)
-}
-
-func newRouter() *http.ServeMux {
-	mux := http.NewServeMux()   // new router is created
-
-	mux.HandleFunc("GET /healthz", healthHandler)
-	mux.HandleFunc("GET /readyz", readyHandler)
-
-	return mux
-}
 
 func main() {
-	mux := newRouter()
+	
+	router := httpapi.NewRouter()
 
-	log.Println("payment-api listening on :8080")
-
-	err := http.ListenAndServe(":8080", mux)
-	if err != nil {
-		log.Fatal(err)
+	server := &http.Server{
+		Addr:              ":8080",
+		Handler:           router,
+		ReadTimeout:       5 * time.Second,
+		WriteTimeout:      20 * time.Second,
+		IdleTimeout:       30 * time.Second,
+		ReadHeaderTimeout: 5 * time.Second,
 	}
+
+	go serverRunner(server) // this is a go routine ans it will carry its work in seperate thread
+
+	// creating signals
+
+	shutdown, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+	<-shutdown.Done()
+
+	fmt.Println("Shutting down server")
+
+	if err := server.Shutdown(context.Background()); err != nil {
+		fmt.Println("Shutdown with Error -----")
+		log.Fatal("Server shutdown failed:", err)
+
+	}
+
+	fmt.Println("Shutdown completee")
+}
+
+
+
+func serverRunner(server *http.Server) {
+	if err := server.ListenAndServe(); err != nil &&
+	err != http.ErrServerClosed {
+	log.Printf("G2 Gin server failed: %v", err)
+}
 }
