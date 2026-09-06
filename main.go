@@ -3,19 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"log"	
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/Prem-Tomar/payment-api/internal/httpapi"
-	
+	"github.com/Prem-Tomar/payment-api/internal/logging"
 )
 
 
 func main() {
-	router := httpapi.NewRouter()
+
+
+	logger := logging.New(os.Stdout)
+	router := httpapi.NewRouter(logger)
 
 	server := &http.Server{
 		Addr:              ":8080",
