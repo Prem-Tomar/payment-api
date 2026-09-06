@@ -1,7 +1,6 @@
 package main
 
 import (
-	
 	"context"
 	"fmt"
 	"log"
@@ -11,11 +10,11 @@ import (
 	"time"
 
 	"github.com/Prem-Tomar/payment-api/internal/httpapi"
+	
 )
 
 
 func main() {
-	
 	router := httpapi.NewRouter()
 
 	server := &http.Server{
@@ -30,7 +29,6 @@ func main() {
 	go serverRunner(server) // this is a go routine ans it will carry its work in seperate thread
 
 	// creating signals
-
 	shutdown, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	<-shutdown.Done()
@@ -40,13 +38,10 @@ func main() {
 	if err := server.Shutdown(context.Background()); err != nil {
 		fmt.Println("Shutdown with Error -----")
 		log.Fatal("Server shutdown failed:", err)
-
 	}
 
 	fmt.Println("Shutdown completee")
 }
-
-
 
 func serverRunner(server *http.Server) {
 	if err := server.ListenAndServe(); err != nil &&
