@@ -17,7 +17,6 @@ import (
 
 func main() {
 
-
 	logger := logging.New(os.Stdout)
 	router := httpapi.NewRouter(logger)
 
@@ -33,17 +32,24 @@ func main() {
 	go serverRunner(server) // this is a go routine ans it will carry its work in seperate thread
 
 	// creating signals
-	shutdown, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	shutdown, stop := context.WithTimeout(context.Background(), 
+	10 * time.Second) 
+
 	defer stop()
 	<-shutdown.Done()
 
-	fmt.Println("Shutting down server")
+	shutdownCtx, cancel := context.WithTimeout(
+		context.Background(),
+		10*time.Second,
+	)
+	defer cancel()
 
-	if err := server.Shutdown(context.Background()); err != nil {
-		fmt.Println("Shutdown with Error -----")
-		log.Fatal("Server shutdown failed:", err)
+	if err := server.Shutdown(shutdownCtx); err != nil {
+		log.Printf("Server shutdown failed: %v", err)
+		return
 	}
 
+	fmt.Println("Shutdown complete")
 	fmt.Println("Shutdown completee")
 }
 

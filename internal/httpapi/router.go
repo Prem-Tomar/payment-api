@@ -24,28 +24,27 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 func healthHandler(context *gin.Context) {
 	fmt.Println("server started health handler")
 	// Retrieve request ID from context
-	requestID, exists := context.Get("request_id")
+	// requestID, exists := context.Get("request_id")
 
-	if !exists {
-		requestID = "request ID not found"
-	}
+	// if !exists {
+	// 	requestID = "request ID not found"
+	// }
 
 	context.JSON(http.StatusOK, gin.H{
-		"Statuf_Gin_Server": "Server Started",
-		"request_Id":        requestID,
+		"status": "ok",
 	})
 }
 
 func readyHandler(context *gin.Context) {
 	fmt.Println("server started")
-	requestID, exists := context.Get("request_id")
+	// requestID, exists := context.Get("request_id")
+	
 
-	if !exists {
-		requestID = "request ID not found"
-	}
+	// if !exists {
+	// 	requestID = "request ID not found"
+	// }
 
 	context.JSON(http.StatusOK, gin.H{
-		"Statuf_Gin_Server": "Server Started",
-		"request_Id":        requestID,
+		"status": "ok",
 	})
 }
