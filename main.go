@@ -29,15 +29,32 @@ func main() {
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	go serverRunner(server) // this is a go routine ans it will carry its work in seperate thread
+	// Channel used to report server errors back to main
+	serverErr := make(chan error , 1)
+
+	go func(){
+		serverErr <-serverRunner(server)
+	}()
+
 
 	// creating signals
-	shutdown, stop := context.WithTimeout(context.Background(), 
-	10 * time.Second) 
-
+	shutdown, stop := signal.NotifyContext(
+		context.Background(),
+		syscall.SIGINT,
+		syscall.SIGTERM,
+	)
 	defer stop()
-	<-shutdown.Done()
 
+	select {
+	case err := <-serverErr:
+		log.Printf("Server failed: %v", err)
+		return
+
+	case <-shutdown.Done():
+		fmt.Println("Shutting down server")
+	}
+
+	// Give active requests a maximum of 10 seconds to finish.
 	shutdownCtx, cancel := context.WithTimeout(
 		context.Background(),
 		10*time.Second,
@@ -49,13 +66,14 @@ func main() {
 		return
 	}
 
-	fmt.Println("Shutdown complete")
 	fmt.Println("Shutdown completee")
 }
 
-func serverRunner(server *http.Server) {
+func serverRunner(server *http.Server) error {
 	if err := server.ListenAndServe(); err != nil &&
 	err != http.ErrServerClosed {
 	log.Printf("G2 Gin server failed: %v", err)
+	return err
 }
+return nil
 }
