@@ -30,9 +30,11 @@ func healthHandler(context *gin.Context) {
 	// 	requestID = "request ID not found"
 	// }
 
-	context.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-	})
+	// context.JSON(http.StatusOK, gin.H{
+	// 	"status": "ok",
+	// })
+
+	writeSuccess(context, http.StatusOK, "ok")
 }
 
 func readyHandler(context *gin.Context) {
@@ -44,7 +46,5 @@ func readyHandler(context *gin.Context) {
 	// 	requestID = "request ID not found"
 	// }
 
-	context.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-	})
+	writeSuccess(context, http.StatusOK, "ok")
 }
