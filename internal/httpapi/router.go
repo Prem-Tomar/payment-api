@@ -17,6 +17,7 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 
 	router.Use(middlewares.AddHeaderID)
 	router.Use(middlewares.AccessLogger(logger))
+	router.Use(requestBodyLimit())
 
 	router.GET("/healthz", healthHandler)
 	router.GET("/readyz", readyHandler)
