@@ -11,6 +11,9 @@ import (
 
 func NewRouter(logger *slog.Logger) *gin.Engine {
 	router := gin.Default()
+	// For Non methods 
+	router.HandleMethodNotAllowed = true
+	router.NoMethod(methodNotAllow)
 
 	router.Use(middlewares.AddHeaderID)
 	router.Use(middlewares.AccessLogger(logger))
@@ -48,3 +51,9 @@ func readyHandler(context *gin.Context) {
 
 	writeSuccess(context, http.StatusOK, "ok")
 }
+
+func methodNotAllow(context *gin.Context){
+
+		context.Header("Allow" , "GET")
+		writeError(context , http.StatusMethodNotAllowed, "method not allowed")
+	}
