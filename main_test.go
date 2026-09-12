@@ -31,30 +31,30 @@ func TestHealthHandler(t *testing.T) {
 	router := newRouter()
 
 	for _, tt := range tests {
-	t.Run(tt.name, func(t *testing.T) {
-		req := httptest.NewRequest(tt.method, "/healthz", nil)
-		rec := httptest.NewRecorder()
+		t.Run(tt.name, func(t *testing.T) {
+			req := httptest.NewRequest(tt.method, "/healthz", nil)
+			rec := httptest.NewRecorder()
 
-		router.ServeHTTP(rec, req)
+			router.ServeHTTP(rec, req)
 
-		if rec.Code != tt.expectedStatus {
-			t.Fatalf(
-				"expected status %d, got %d",
-				tt.expectedStatus,
-				rec.Code,
-			)
-		}
+			if rec.Code != tt.expectedStatus {
+				t.Fatalf(
+					"expected status %d, got %d",
+					tt.expectedStatus,
+					rec.Code,
+				)
+			}
 
-		if tt.expectedBody != "" &&
-			rec.Body.String() != tt.expectedBody+"\n" {
-			t.Fatalf(
-				"expected body %q, got %q",
-				tt.expectedBody+"\n",
-				rec.Body.String(),
-			)
-		}
-	})
-}
+			if tt.expectedBody != "" &&
+				rec.Body.String() != tt.expectedBody+"\n" {
+				t.Fatalf(
+					"expected body %q, got %q",
+					tt.expectedBody+"\n",
+					rec.Body.String(),
+				)
+			}
+		})
+	}
 }
 
 func TestReadyHandler(t *testing.T) {

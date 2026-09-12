@@ -1,12 +1,12 @@
-	package logging
+package logging
 
-	import (
-		"io"
-		"log/slog"
+import (
+	"io"
+	"log/slog"
+)
+
+func New(w io.Writer) *slog.Logger {
+	return slog.New(
+		slog.NewTextHandler(w, nil),
 	)
-
-	func New(w io.Writer) *slog.Logger {
-		return slog.New(
-			slog.NewTextHandler(w, nil),
-		)
-	}
+}

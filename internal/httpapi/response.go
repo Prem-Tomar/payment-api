@@ -2,29 +2,27 @@ package httpapi
 
 import (
 	"github.com/gin-gonic/gin"
-	
 )
 
-type successResponse struct{
-	Status string `json : "status"`
+type successResponse struct {
+	Status string `json:"status"`
 }
 
 type errorResponse struct {
-	Error string `type : "error"`
+	Error string `type:"error"`
 }
 
-func writeSuccess(c *gin.Context, status int , message string){
+func writeSuccess(c *gin.Context, status int, message string) {
 
-	c.JSON(status , successResponse{
+	c.JSON(status, successResponse{
 
-		Status:  message,
+		Status: message,
 	})
 
 }
 
-
-func writeError( c *gin.Context , status int , message string){
-	c.JSON(status , successResponse{
-		Status : message,
+func writeError(c *gin.Context, status int, message string) {
+	c.JSON(status, errorResponse{
+		Error: message,
 	})
 }

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"	
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,7 +13,6 @@ import (
 	"github.com/Prem-Tomar/payment-api/internal/httpapi"
 	"github.com/Prem-Tomar/payment-api/internal/logging"
 )
-
 
 func main() {
 
@@ -30,12 +29,11 @@ func main() {
 	}
 
 	// Channel used to report server errors back to main
-	serverErr := make(chan error , 1)
+	serverErr := make(chan error, 1)
 
-	go func(){
-		serverErr <-serverRunner(server)
+	go func() {
+		serverErr <- serverRunner(server)
 	}()
-
 
 	// creating signals
 	shutdown, stop := signal.NotifyContext(
@@ -71,9 +69,9 @@ func main() {
 
 func serverRunner(server *http.Server) error {
 	if err := server.ListenAndServe(); err != nil &&
-	err != http.ErrServerClosed {
-	log.Printf("G2 Gin server failed: %v", err)
-	return err
-}
-return nil
+		err != http.ErrServerClosed {
+		log.Printf("G2 Gin server failed: %v", err)
+		return err
+	}
+	return nil
 }

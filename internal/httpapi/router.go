@@ -10,8 +10,9 @@ import (
 )
 
 func NewRouter(logger *slog.Logger) *gin.Engine {
-	router := gin.Default()
-	// For Non methods 
+	router := gin.New()
+	router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
+	// For Non methods
 	router.HandleMethodNotAllowed = true
 	router.NoMethod(methodNotAllow)
 
@@ -27,34 +28,16 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 
 func healthHandler(context *gin.Context) {
 	fmt.Println("server started health handler")
-	// Retrieve request ID from context
-	// requestID, exists := context.Get("request_id")
-
-	// if !exists {
-	// 	requestID = "request ID not found"
-	// }
-
-	// context.JSON(http.StatusOK, gin.H{
-	// 	"status": "ok",
-	// })
-
 	writeSuccess(context, http.StatusOK, "ok")
 }
 
 func readyHandler(context *gin.Context) {
 	fmt.Println("server started")
-	// requestID, exists := context.Get("request_id")
-	
-
-	// if !exists {
-	// 	requestID = "request ID not found"
-	// }
-
-	writeSuccess(context, http.StatusOK, "ok")
+	writeSuccess(context, http.StatusOK, "ready")
 }
 
-func methodNotAllow(context *gin.Context){
+func methodNotAllow(context *gin.Context) {
 
-		context.Header("Allow" , "GET")
-		writeError(context , http.StatusMethodNotAllowed, "method not allowed")
-	}
+	context.Header("Allow", "GET")
+	writeError(context, http.StatusMethodNotAllowed, "method not allowed")
+}
