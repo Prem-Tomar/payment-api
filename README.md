@@ -34,7 +34,10 @@ case. Normal work must happen through a review branch and GitHub pull request.
 
 ## Current Status
 
-This repo is intentionally documentation-first. No Go module, executable service, endpoints,
-database, processor adapter, or deployment scaffold has been added yet.
+The repo currently has a Gin service foundation in progress through the G9 learning scope:
+server lifecycle, health/readiness routes, request ID middleware, access logging, JSON helpers,
+method handling, body-size guarding, and environment-based runtime configuration.
 
 The first task is documented in [docs/tasks/day-g1-api-boundary.md](docs/tasks/day-g1-api-boundary.md).
+The current Gin service foundation is documented in
+[docs/tasks/day-g2-to-g9-gin-service-foundation.md](docs/tasks/day-g2-to-g9-gin-service-foundation.md).
