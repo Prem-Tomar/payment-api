@@ -10,22 +10,28 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Prem-Tomar/payment-api/internal/config"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi"
 	"github.com/Prem-Tomar/payment-api/internal/logging"
 )
 
 func main() {
 
+	configuration, err := config.Load()
+	if err !=nil {
+		log.Fatal(err)
+	}
+
 	logger := logging.New(os.Stdout)
 	router := httpapi.NewRouter(logger)
 
 	server := &http.Server{
-		Addr:              ":8080",
+		Addr:              fmt.Sprintf("%s:%d" , configuration.Host, configuration.Port),
 		Handler:           router,
-		ReadTimeout:       5 * time.Second,
-		WriteTimeout:      20 * time.Second,
-		IdleTimeout:       30 * time.Second,
-		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       configuration.ReadTimeout,
+		WriteTimeout:      configuration.WriteTimeout,
+		IdleTimeout:       configuration.IdleTimeout,
+		ReadHeaderTimeout:  configuration.HeaderTimeout,
 	}
 
 	// Channel used to report server errors back to main
