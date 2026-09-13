@@ -20,8 +20,10 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 	router.Use(middlewares.AccessLogger(logger))
 	router.Use(requestBodyLimit())
 
+	checker := DefaultReadinessChecker{}
+
 	router.GET("/healthz", healthHandler)
-	router.GET("/readyz", readyHandler)
+	router.GET("/readyz", readyHandler(checker))
 
 	return router
 }
@@ -31,9 +33,14 @@ func healthHandler(context *gin.Context) {
 	writeSuccess(context, http.StatusOK, "ok")
 }
 
-func readyHandler(context *gin.Context) {
-	fmt.Println("server started")
-	writeSuccess(context, http.StatusOK, "ready")
+func readyHandler(checker ReadinessChecker) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		if err := checker.Check(); err != nil {
+			writeError(context, http.StatusServiceUnavailable, "service unavailable")
+			return
+		}
+		writeSuccess(context, http.StatusOK, "ready")
+	}
 }
 
 func methodNotAllow(context *gin.Context) {
