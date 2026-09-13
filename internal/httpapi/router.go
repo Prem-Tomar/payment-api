@@ -16,14 +16,21 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 	router.HandleMethodNotAllowed = true
 	router.NoMethod(methodNotAllow)
 
+	// Middlewares
 	router.Use(middlewares.AddHeaderID)
 	router.Use(middlewares.AccessLogger(logger))
 	router.Use(requestBodyLimit())
+
+	// Groups
+	registerV1Routes(router)
+	// future public APIs
 
 	checker := DefaultReadinessChecker{}
 
 	router.GET("/healthz", healthHandler)
 	router.GET("/readyz", readyHandler(checker))
+
+	router.NoRoute(noRouteHandler)
 
 	return router
 }
@@ -47,4 +54,8 @@ func methodNotAllow(context *gin.Context) {
 
 	context.Header("Allow", "GET")
 	writeError(context, http.StatusMethodNotAllowed, "method not allowed")
+}
+
+func noRouteHandler(context *gin.Context) {
+	writeError(context, http.StatusNotFound, "route not found")
 }
