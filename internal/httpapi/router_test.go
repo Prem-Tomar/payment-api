@@ -72,7 +72,7 @@ func TestMethodNotAllowedResponse(t *testing.T) {
 	if got := rec.Header().Get("Allow"); got != "GET" {
 		t.Fatalf("expected Allow header GET, got %q", got)
 	}
-	if want := `{"error":"method not allowed"}` + "\n"; rec.Body.String() != want {
+	if want := `{"error":"method not allowed"}`; rec.Body.String() != want {
 		t.Fatalf("expected body %q, got %q", want, rec.Body.String())
 	}
 }
@@ -88,7 +88,7 @@ func TestBodyLimitRejectsDeclaredOversizedRequest(t *testing.T) {
 	if rec.Code != http.StatusRequestEntityTooLarge {
 		t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, rec.Code)
 	}
-	if want := `{"error":"request body too large"}` + "\n"; rec.Body.String() != want {
+	if want := `{"error":"request body too large"}`; rec.Body.String() != want {
 		t.Fatalf("expected body %q, got %q", want, rec.Body.String())
 	}
 }
