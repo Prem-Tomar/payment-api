@@ -9,7 +9,7 @@ type successResponse struct {
 }
 
 type errorResponse struct {
-	Error string `type:"error"`
+	Error string `json:"error"`
 }
 
 func writeSuccess(c *gin.Context, status int, message string) {
