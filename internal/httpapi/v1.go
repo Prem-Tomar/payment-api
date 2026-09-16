@@ -15,31 +15,31 @@ func registerV1Routes(router *gin.Engine) {
 }
 
 func createPaymentIntentHandler(context *gin.Context) {
-	 var request dto.CreatePaymentIntentRequest
+	var request dto.CreatePaymentIntentRequest
 
-    if err := context.ShouldBindJSON(&request); err != nil {
-        var maxBytesErr *http.MaxBytesError
+	if err := context.ShouldBindJSON(&request); err != nil {
+		var maxBytesErr *http.MaxBytesError
 
-        if errors.As(err, &maxBytesErr) {
-            writeError(
-                context,
-                http.StatusRequestEntityTooLarge,
-                "request body too large",
-            )
-            return
-        }
+		if errors.As(err, &maxBytesErr) {
+			writeError(
+				context,
+				http.StatusRequestEntityTooLarge,
+				"request body too large",
+			)
+			return
+		}
 
-        writeError(
-            context,
-            http.StatusBadRequest,
-            "invalid request body",
-        )
-        return
-    }
+		writeError(
+			context,
+			http.StatusBadRequest,
+			"invalid request body",
+		)
+		return
+	}
 
-    writeError(
-        context,
-        http.StatusNotImplemented,
-        "payment intent creation is not implemented",
-    )
+	writeError(
+		context,
+		http.StatusNotImplemented,
+		"payment intent creation is not implemented",
+	)
 }

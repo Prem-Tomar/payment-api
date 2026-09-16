@@ -18,7 +18,7 @@ import (
 func main() {
 
 	configuration, err := config.Load()
-	if err !=nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -26,12 +26,12 @@ func main() {
 	router := httpapi.NewRouter(logger)
 
 	server := &http.Server{
-		Addr:              fmt.Sprintf("%s:%d" , configuration.Host, configuration.Port),
+		Addr:              fmt.Sprintf("%s:%d", configuration.Host, configuration.Port),
 		Handler:           router,
 		ReadTimeout:       configuration.ReadTimeout,
 		WriteTimeout:      configuration.WriteTimeout,
 		IdleTimeout:       configuration.IdleTimeout,
-		ReadHeaderTimeout:  configuration.HeaderTimeout,
+		ReadHeaderTimeout: configuration.HeaderTimeout,
 	}
 
 	// Channel used to report server errors back to main

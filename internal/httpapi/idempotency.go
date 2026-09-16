@@ -8,11 +8,11 @@ import (
 )
 
 const (
-  idempotencyKeyHeader = "Idempotency-Key"
-	maxIdempotancyKeyLen = 255
+	idempotencyKeyHeader = "Idempotency-Key"
+	maxIdempotencyKeyLen = 255
 )
 
-func requireIdempotancyKey(context *gin.Context) {
+func requireIdempotencyKey(context *gin.Context) {
 	key := strings.TrimSpace(context.GetHeader(idempotencyKeyHeader))
 
 	if key == "" {
@@ -21,7 +21,7 @@ func requireIdempotancyKey(context *gin.Context) {
 		return
 	}
 
-	if len(key) > maxIdempotancyKeyLen {
+	if len(key) > maxIdempotencyKeyLen {
 		writeError(context, http.StatusBadRequest, "invalid idempotency key")
 		context.Abort()
 		return

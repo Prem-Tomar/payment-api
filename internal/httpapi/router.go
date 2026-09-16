@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func newRouter(logger *slog.Logger , checker ReadinessChecker) *gin.Engine {
+func newRouter(logger *slog.Logger, checker ReadinessChecker) *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
@@ -37,9 +37,9 @@ func newRouter(logger *slog.Logger , checker ReadinessChecker) *gin.Engine {
 }
 
 func NewRouter(logger *slog.Logger) *gin.Engine {
-    checker := DefaultReadinessChecker{}
+	checker := DefaultReadinessChecker{}
 
-    return newRouter(logger, checker)
+	return newRouter(logger, checker)
 }
 
 func healthHandler(context *gin.Context) {
