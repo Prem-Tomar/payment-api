@@ -9,8 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(logger *slog.Logger) *gin.Engine {
+func newRouter(logger *slog.Logger , checker ReadinessChecker) *gin.Engine {
 	router := gin.New()
+
 	router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
 	// For Non methods
 	router.HandleMethodNotAllowed = true
@@ -25,7 +26,7 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 	registerV1Routes(router)
 	// future public APIs
 
-	checker := DefaultReadinessChecker{}
+	// checker := DefaultReadinessChecker{}
 
 	router.GET("/healthz", healthHandler)
 	router.GET("/readyz", readyHandler(checker))
@@ -33,6 +34,12 @@ func NewRouter(logger *slog.Logger) *gin.Engine {
 	router.NoRoute(noRouteHandler)
 
 	return router
+}
+
+func NewRouter(logger *slog.Logger) *gin.Engine {
+    checker := DefaultReadinessChecker{}
+
+    return newRouter(logger, checker)
 }
 
 func healthHandler(context *gin.Context) {

@@ -1,33 +1,36 @@
 package httpapi
 
 import (
-	"github.com/gin-gonic/gin"
+	"bytes"
+	"io"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 const maxRequestBodySize = 1 << 20 // This is size less than 1 MB
 
 func requestBodyLimit() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.ContentLength > maxRequestBodySize {
-			//Reject immediatly as content length > max required size
-			writeError(
-				c,
-				http.StatusRequestEntityTooLarge,
-				"request body too large",
-			)
+		const maxBodySize = 1 << 20
 
-			// to not allow it to go another middlewares
+		body, err := io.ReadAll(
+			io.LimitReader(c.Request.Body, maxBodySize+1),
+		)
+
+		if err != nil {
+			writeError(c, http.StatusBadRequest, "unable to read request body")
 			c.Abort()
 			return
 		}
 
-		// Got the Idea that , what if data is coming in chunks and is more that the required size ,  we will handle it in POST request when created
-		c.Request.Body = http.MaxBytesReader(
-			c.Writer,
-			c.Request.Body,
-			maxRequestBodySize,
-		)
+		if len(body) > maxBodySize {
+			writeError(c, http.StatusRequestEntityTooLarge, "request body too large")
+			c.Abort()
+			return
+		}
+
+		c.Request.Body = io.NopCloser(bytes.NewReader(body))
 		c.Next()
 	}
 }
