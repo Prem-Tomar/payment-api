@@ -2,16 +2,15 @@ package httpapi
 
 import (
 	"errors"
-	"net/http"
-
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func registerV1Routes(router *gin.Engine) {
 	v1 := router.Group("/v1")
 
-	v1.POST("/payment-intents", requireIdempotancyKey, createPaymentIntentHandler)
+	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler)
 }
 
 func createPaymentIntentHandler(context *gin.Context) {
