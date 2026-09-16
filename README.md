@@ -32,9 +32,40 @@ Those remain Rust-owned unless the architecture is explicitly changed.
 No direct merges or pushes to `main` are allowed unless Prem explicitly approves that specific
 case. Normal work must happen through a review branch and GitHub pull request.
 
+## Validation Rule
+
+Always validate changes before pushing a PR update.
+
+Run tests:
+
+```sh
+go test ./...
+```
+
+Run Go's built-in lint-style static checks:
+
+```sh
+go vet ./...
+```
+
+Format changed Go files before review. In PowerShell:
+
+```powershell
+gofmt -w (git ls-files '*.go')
+```
+
+In bash or zsh:
+
+```sh
+gofmt -w $(git ls-files '*.go')
+```
+
 ## Current Status
 
-This repo is intentionally documentation-first. No Go module, executable service, endpoints,
-database, processor adapter, or deployment scaffold has been added yet.
+The repo currently has a Gin service foundation in progress through the G9 learning scope:
+server lifecycle, health/readiness routes, request ID middleware, access logging, JSON helpers,
+method handling, body-size guarding, and environment-based runtime configuration.
 
 The first task is documented in [docs/tasks/day-g1-api-boundary.md](docs/tasks/day-g1-api-boundary.md).
+The current Gin service foundation is documented in
+[docs/tasks/day-g2-to-g9-gin-service-foundation.md](docs/tasks/day-g2-to-g9-gin-service-foundation.md).
