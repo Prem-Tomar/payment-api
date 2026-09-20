@@ -2,18 +2,20 @@ package httpapi
 
 import (
 	"errors"
+	"net/http"
+
+	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func registerV1Routes(router *gin.Engine) {
+func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentIntentUseCase) {
 	v1 := router.Group("/v1")
 
-	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler)
+	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentintentHandler)
 }
 
-func createPaymentIntentHandler(context *gin.Context) {
+func createPaymentintentHandler(context *gin.Context) {
 	var request dto.CreatePaymentIntentRequest
 
 	if err := context.ShouldBindJSON(&request); err != nil {

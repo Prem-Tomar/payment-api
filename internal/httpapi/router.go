@@ -5,11 +5,12 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
-func newRouter(logger *slog.Logger, checker ReadinessChecker) *gin.Engine {
+func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase application.CreatePaymentIntentUseCase) *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
@@ -23,7 +24,7 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker) *gin.Engine {
 	router.Use(requestBodyLimit())
 
 	// Groups
-	registerV1Routes(router)
+	registerV1Routes(router, useCase)
 	// future public APIs
 
 	// checker := DefaultReadinessChecker{}
@@ -38,8 +39,9 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker) *gin.Engine {
 
 func NewRouter(logger *slog.Logger) *gin.Engine {
 	checker := DefaultReadinessChecker{}
+	useCase := application.PaymentIntentService{}
 
-	return newRouter(logger, checker)
+	return newRouter(logger, checker, useCase)
 }
 
 func healthHandler(context *gin.Context) {
