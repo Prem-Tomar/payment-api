@@ -3,6 +3,7 @@ package httpapi
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
@@ -13,6 +14,10 @@ func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentInten
 	v1 := router.Group("/v1")
 
 	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentintentHandler)
+	 v1.GET(
+        "/payment-intents/:id",
+        getPaymentIntentHandler,
+    )
 }
 
 func createPaymentintentHandler(context *gin.Context) {
@@ -42,5 +47,19 @@ func createPaymentintentHandler(context *gin.Context) {
 		context,
 		http.StatusNotImplemented,
 		"payment intent creation is not implemented",
+	)
+}
+
+func getPaymentIntentHandler(c *gin.Context){
+	id := strings.TrimSpace(c.Param("id"))
+
+	if id =="" {
+		writeError(c, http.StatusBadRequest, "payment intent id is required")
+		return 
+	}
+
+	_ = id 
+	writeError(
+		c, http.StatusNotImplemented, "payment intent lookup is not implemented",
 	)
 }
