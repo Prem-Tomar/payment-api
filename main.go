@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
 	"github.com/Prem-Tomar/payment-api/internal/config"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi"
 	"github.com/Prem-Tomar/payment-api/internal/logging"

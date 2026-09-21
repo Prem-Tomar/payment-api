@@ -7,3 +7,7 @@ type CreatePaymentIntentRequest struct {
 	MerchantRef   string `json:"merchant_ref,omitempty" binding:"required"`
 	CustomerRef   string `json:"customer_ref,omitempty"`
 }
+
+type CreatePaymentIntentResponse struct {
+	Status string `json:"status"`
+}
