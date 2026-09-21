@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/Prem-Tomar/payment-api/internal/config"
+	"github.com/Prem-Tomar/payment-api/internal/httpapi"
+	"github.com/Prem-Tomar/payment-api/internal/logging"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-	"github.com/Prem-Tomar/payment-api/internal/config"
-	"github.com/Prem-Tomar/payment-api/internal/httpapi"
-	"github.com/Prem-Tomar/payment-api/internal/logging"
 )
 
 func main() {

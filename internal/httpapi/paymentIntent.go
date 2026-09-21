@@ -3,6 +3,7 @@ package httpapi
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
@@ -43,4 +44,17 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			return
 		}
 	}
+}
+
+func getPaymentIntentHandler(c *gin.Context) {
+	id := strings.TrimSpace(c.Param("id"))
+
+	if id == "" {
+		writeError(c, http.StatusBadRequest, "payment intent id is required")
+		return
+	}
+
+	writeError(
+		c, http.StatusNotImplemented, "payment intent lookup is not implemented",
+	)
 }
