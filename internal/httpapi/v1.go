@@ -9,9 +9,5 @@ func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentInten
 	v1 := router.Group("/v1")
 
 	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(useCase))
-	v1.
-		GET(
-			"/payment-intents/:id",
-			getPaymentIntentHandler,
-		)
+	v1.GET("/payment-intents/:id", getPaymentIntentHandler)
 }
