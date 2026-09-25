@@ -43,6 +43,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			)
 			return
 		}
+
 	}
 }
 

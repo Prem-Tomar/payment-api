@@ -12,9 +12,9 @@ type CreatePaymentIntentUseCase interface {
 }
 
 type PaymentIntentService struct {
-	Status string `json:"status"`
 }
 
 func (PaymentIntentService) CreatePaymentIntent(ctx context.Context) error {
+
 	return ErrNotImplemented
 }
