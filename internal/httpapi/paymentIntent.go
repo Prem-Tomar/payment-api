@@ -34,7 +34,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			return
 		}
 
-		err := useCase.CreatePaymentIntent(c.Request.Context())
+		result, err := useCase.CreatePaymentIntent(c.Request.Context())
 		if errors.Is(err, application.ErrNotImplemented) {
 			writeError(
 				c,
@@ -43,6 +43,22 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			)
 			return
 		}
+
+		if err != nil {
+			writeError(
+				c,
+				http.StatusInternalServerError,
+				"internal server error",
+			)
+			return
+		}
+
+		response := dto.CreatePaymentIntentResponse{
+			Status: "created",
+			ID:     result.ID,
+		}
+
+		c.JSON(http.StatusCreated, response)
 
 	}
 }
