@@ -12,6 +12,9 @@ func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentInten
 	v1.Use(middlewares.RequireAPIKey)
 	v1.Use(middlewares.RequireMerchantScope)
 
+	rateLimiter := middlewares.NewRateLimiter()
+	v1.Use(rateLimiter.Middleware())
+
 	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(useCase))
 	v1.GET("/payment-intents/:id", getPaymentIntentHandler)
 }
