@@ -13,7 +13,8 @@ import (
 func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase application.CreatePaymentIntentUseCase) *gin.Engine {
 	router := gin.New()
 
-	router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
+	// router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
+	router.Use(middlewares.Recovery(logger))
 	// For Non methods
 	router.HandleMethodNotAllowed = true
 	router.NoMethod(methodNotAllow)
