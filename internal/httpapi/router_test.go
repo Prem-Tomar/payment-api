@@ -80,7 +80,7 @@ func TestMethodNotAllowedResponse(t *testing.T) {
 func TestBodyLimitRejectsDeclaredOversizedRequest(t *testing.T) {
 	router := testRouter()
 	body := strings.NewReader(strings.Repeat("a", maxRequestBodySize+1))
-	req := httptest.NewRequest(http.MethodPost, "/healthz", body)
+	req := httptest.NewRequest(http.MethodPost, "/v1/payment-intents", body)
 	rec := httptest.NewRecorder()
 
 	router.ServeHTTP(rec, req)

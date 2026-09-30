@@ -22,7 +22,6 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase applicatio
 	// Middlewares
 	router.Use(middlewares.AddHeaderID)
 	router.Use(middlewares.AccessLogger(logger))
-	router.Use(requestBodyLimit())
 
 	// Groups
 	registerV1Routes(router, useCase)
