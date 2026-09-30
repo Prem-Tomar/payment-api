@@ -1,44 +1,22 @@
 package httpapi
 
 import (
-	"errors"
-	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
+	"github.com/Prem-Tomar/payment-api/internal/application"
+	"github.com/Prem-Tomar/payment-api/internal/middlewares"
+
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func registerV1Routes(router *gin.Engine) {
+func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentIntentUseCase) {
 	v1 := router.Group("/v1")
 
-	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler)
-}
+	v1.Use(requestBodyLimit())
+	v1.Use(middlewares.RequireAPIKey)
+	v1.Use(middlewares.RequireMerchantScope)
 
-func createPaymentIntentHandler(context *gin.Context) {
-	var request dto.CreatePaymentIntentRequest
+	rateLimiter := middlewares.NewRateLimiter()
+	v1.Use(rateLimiter.Middleware())
 
-	if err := context.ShouldBindJSON(&request); err != nil {
-		var maxBytesErr *http.MaxBytesError
-
-		if errors.As(err, &maxBytesErr) {
-			writeError(
-				context,
-				http.StatusRequestEntityTooLarge,
-				"request body too large",
-			)
-			return
-		}
-
-		writeError(
-			context,
-			http.StatusBadRequest,
-			"invalid request body",
-		)
-		return
-	}
-
-	writeError(
-		context,
-		http.StatusNotImplemented,
-		"payment intent creation is not implemented",
-	)
+	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(useCase))
+	v1.GET("/payment-intents/:id", getPaymentIntentHandler)
 }
