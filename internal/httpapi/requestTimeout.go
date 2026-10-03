@@ -11,22 +11,22 @@ import (
 const publicRequestTimeOut = 5 * time.Second
 
 func requestTimeOut(timeout time.Duration) gin.HandlerFunc {
-return func(c *gin.Context){
+	return func(c *gin.Context) {
 
-	ctx , cancel := context.WithTimeout(c.Request.Context() , timeout,)
+		ctx, cancel := context.WithTimeout(c.Request.Context(), timeout)
 
-	defer cancel()
+		defer cancel()
 
-	c.Request = c.Request.WithContext(ctx)
+		c.Request = c.Request.WithContext(ctx)
 
-	c.Next()
+		c.Next()
 
-	if ctx.Err() == context.DeadlineExceeded && c.Writer.Written() { 
-		writeError(
-			c,
-			http.StatusGatewayTimeout,
-			"request timed out",
+		if ctx.Err() == context.DeadlineExceeded && c.Writer.Written() {
+			writeError(
+				c,
+				http.StatusGatewayTimeout,
+				"request timed out",
 			)
 		}
-}
+	}
 }
