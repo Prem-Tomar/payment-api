@@ -17,6 +17,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		if err := c.ShouldBindJSON(&request); err != nil {
 
 			request.MerchantRef = strings.TrimSpace(request.MerchantRef)
+			request.CustomerRef = strings.TrimSpace(request.CustomerRef)
 
 			if request.MerchantRef == "" {
 				writeError(
@@ -26,6 +27,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				)
 				return
 			}
+
 			var maxBytesErr *http.MaxBytesError
 
 			if errors.As(err, &maxBytesErr) {
