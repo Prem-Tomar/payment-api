@@ -15,6 +15,17 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		var request dto.CreatePaymentIntentRequest
 
 		if err := c.ShouldBindJSON(&request); err != nil {
+
+			request.MerchantRef = strings.TrimSpace(request.MerchantRef)
+
+			if request.MerchantRef == "" {
+				writeError(
+					c,
+					http.StatusBadRequest,
+					"invalid request body",
+				)
+				return
+			}
 			var maxBytesErr *http.MaxBytesError
 
 			if errors.As(err, &maxBytesErr) {

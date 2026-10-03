@@ -33,6 +33,17 @@ func main() {
 		ReadHeaderTimeout: configuration.HeaderTimeout,
 	}
 
+	logger.Info(
+		"server starting",
+		"address", server.Addr,
+		"read_timeout", configuration.ReadTimeout,
+		"write_timeout", configuration.WriteTimeout,
+		"idle_timeout", configuration.IdleTimeout,
+		"header_timeout", configuration.HeaderTimeout,
+		"global_middleware", "recovery,request_id,access_log",
+		"v1_middleware", "request_timeout,body_limit,api_key,merchant_scope,rate_limit",
+	)
+
 	// Channel used to report server errors back to main
 	serverErr := make(chan error, 1)
 
