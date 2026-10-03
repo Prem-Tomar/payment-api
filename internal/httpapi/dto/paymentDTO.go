@@ -1,7 +1,7 @@
 package dto
 
 type CreatePaymentIntentRequest struct {
-	Amount        int64  `json:"amount" binding:"required"`
+	Amount        int64  `json:"amount" binding:"gt=0"`
 	Currency      string `json:"currency" binding:"required"`
 	PaymentMethod string `json:"payment_method" binding:"required"`
 	MerchantRef   string `json:"merchant_ref" binding:"required"`
