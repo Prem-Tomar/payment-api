@@ -67,7 +67,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		}
 
 		response := dto.CreatePaymentIntentResponse{
-			Status: "created",
+			Status: dto.PaymentIntentStatusPlaceHolder,
 			ID:     result.ID,
 		}
 

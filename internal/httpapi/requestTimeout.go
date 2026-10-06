@@ -21,7 +21,7 @@ func requestTimeOut(timeout time.Duration) gin.HandlerFunc {
 
 		c.Next()
 
-		if ctx.Err() == context.DeadlineExceeded && c.Writer.Written() {
+		if ctx.Err() == context.DeadlineExceeded && !c.Writer.Written() {
 			writeError(
 				c,
 				http.StatusGatewayTimeout,
