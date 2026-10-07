@@ -22,3 +22,11 @@ func (PaymentIntentService) CreatePaymentIntent(ctx context.Context) (CreatePaym
 
 	return CreatePaymentIntentResult{}, ErrNotImplemented
 }
+
+type FakePaymentIntentService struct{}
+
+func (FakePaymentIntentService) CreatePaymentIntent(ctx context.Context) (CreatePaymentIntentResult, error) {
+	return CreatePaymentIntentResult{
+		ID: "fake-payment-intent-001",
+	}, nil
+}
