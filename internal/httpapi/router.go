@@ -39,7 +39,8 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase applicatio
 
 func NewRouter(logger *slog.Logger) *gin.Engine {
 	checker := DefaultReadinessChecker{}
-	useCase := application.PaymentIntentService{}
+	// useCase := application.PaymentIntentService{}
+	useCase := application.FakePaymentIntentService{}
 
 	return newRouter(logger, checker, useCase)
 }
