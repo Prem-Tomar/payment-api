@@ -19,13 +19,13 @@ func requestBodyLimit() gin.HandlerFunc {
 		)
 
 		if err != nil {
-			writeError(c, http.StatusBadRequest, "unable to read request body")
+			writeError(c, http.StatusBadRequest, ErrValidation, "unable to read request body")
 			c.Abort()
 			return
 		}
 
 		if len(body) > maxBodySize {
-			writeError(c, http.StatusRequestEntityTooLarge, "request body too large")
+			writeError(c, http.StatusRequestEntityTooLarge, ErrRequestTooLarge, "request body too large")
 			c.Abort()
 			return
 		}

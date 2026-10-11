@@ -16,13 +16,13 @@ func requireIdempotencyKey(context *gin.Context) {
 	key := strings.TrimSpace(context.GetHeader(idempotencyKeyHeader))
 
 	if key == "" {
-		writeError(context, http.StatusBadRequest, "missing idempotency key")
+		writeError(context, http.StatusBadRequest,ErrValidation, "missing idempotency key")
 		context.Abort()
 		return
 	}
 
 	if len(key) > maxIdempotencyKeyLen {
-		writeError(context, http.StatusBadRequest, "invalid idempotency key")
+		writeError(context, http.StatusBadRequest, ErrValidation,"invalid idempotency key")
 		context.Abort()
 		return
 	}
