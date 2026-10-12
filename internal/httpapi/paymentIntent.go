@@ -41,7 +41,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
-				ErrValidation,
+				ErrInvalidRequest,
 				"invalid request body",
 			)
 			return
@@ -56,7 +56,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				c,
 				http.StatusNotImplemented,
 				ErrNotImplemented,
-				"payment intent creation is not implementd",
+				"payment intent creation is not implemented",
 			)
 			return
 		}

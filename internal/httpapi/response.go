@@ -16,6 +16,8 @@ const (
 	ErrGatewayTimeout APIErrorCode = "GATEWAY_TIMEOUT"
 	ErrMethodNotAllowed APIErrorCode = "METHOD_NOT_ALLOWED"
 	ErrServiceUnavailable APIErrorCode = "SERVICE_UNAVAILABLE"
+	 ErrMissingIdempotencyKey APIErrorCode = "MISSING_IDEMPOTENCY_KEY"
+    ErrInvalidIdempotencyKey APIErrorCode = "INVALID_IDEMPOTENCY_KEY"
 	
 )
 
