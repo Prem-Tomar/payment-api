@@ -7,18 +7,17 @@ import (
 type APIErrorCode string
 
 const (
-	ErrInvalidRequest  APIErrorCode = "INVALID_REQUEST"
-	ErrRequestTooLarge APIErrorCode = "REQUEST_TOO_LARGE"
-	ErrValidation      APIErrorCode = "VALIDATION_ERR"
-	ErrNotImplemented  APIErrorCode = "NOT_IMPLEMENTED"
-	ErrInternal        APIErrorCode = "INTERNAL_ERROR"
-	ErronNotFound      APIErrorCode = "NOT_FOUND"
-	ErrGatewayTimeout APIErrorCode = "GATEWAY_TIMEOUT"
-	ErrMethodNotAllowed APIErrorCode = "METHOD_NOT_ALLOWED"
-	ErrServiceUnavailable APIErrorCode = "SERVICE_UNAVAILABLE"
-	 ErrMissingIdempotencyKey APIErrorCode = "MISSING_IDEMPOTENCY_KEY"
-    ErrInvalidIdempotencyKey APIErrorCode = "INVALID_IDEMPOTENCY_KEY"
-	
+	ErrInvalidRequest        APIErrorCode = "INVALID_REQUEST"
+	ErrRequestTooLarge       APIErrorCode = "REQUEST_TOO_LARGE"
+	ErrValidation            APIErrorCode = "VALIDATION_ERR"
+	ErrNotImplemented        APIErrorCode = "NOT_IMPLEMENTED"
+	ErrInternal              APIErrorCode = "INTERNAL_ERROR"
+	ErronNotFound            APIErrorCode = "NOT_FOUND"
+	ErrGatewayTimeout        APIErrorCode = "GATEWAY_TIMEOUT"
+	ErrMethodNotAllowed      APIErrorCode = "METHOD_NOT_ALLOWED"
+	ErrServiceUnavailable    APIErrorCode = "SERVICE_UNAVAILABLE"
+	ErrMissingIdempotencyKey APIErrorCode = "MISSING_IDEMPOTENCY_KEY"
+	ErrInvalidIdempotencyKey APIErrorCode = "INVALID_IDEMPOTENCY_KEY"
 )
 
 type successResponse struct {
