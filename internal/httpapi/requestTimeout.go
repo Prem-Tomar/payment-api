@@ -25,6 +25,7 @@ func requestTimeOut(timeout time.Duration) gin.HandlerFunc {
 			writeError(
 				c,
 				http.StatusGatewayTimeout,
+				ErrGatewayTimeout,
 				"request timed out",
 			)
 		}

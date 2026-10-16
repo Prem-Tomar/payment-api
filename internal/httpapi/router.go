@@ -53,7 +53,7 @@ func healthHandler(context *gin.Context) {
 func readyHandler(checker ReadinessChecker) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		if err := checker.Check(); err != nil {
-			writeError(context, http.StatusServiceUnavailable, "service unavailable")
+			writeError(context, http.StatusServiceUnavailable, ErrServiceUnavailable, "service unavailable")
 			return
 		}
 		writeSuccess(context, http.StatusOK, "ready")
@@ -63,9 +63,9 @@ func readyHandler(checker ReadinessChecker) gin.HandlerFunc {
 func methodNotAllow(context *gin.Context) {
 
 	context.Header("Allow", "GET")
-	writeError(context, http.StatusMethodNotAllowed, "method not allowed")
+	writeError(context, http.StatusMethodNotAllowed, ErrMethodNotAllowed, "method not allowed")
 }
 
 func noRouteHandler(context *gin.Context) {
-	writeError(context, http.StatusNotFound, "route not found")
+	writeError(context, http.StatusNotFound, ErronNotFound, "route not found")
 }

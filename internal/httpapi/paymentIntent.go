@@ -20,6 +20,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				writeError(
 					c,
 					http.StatusRequestEntityTooLarge,
+					ErrRequestTooLarge,
 					"Request body to large",
 				)
 				return
@@ -27,6 +28,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
+				ErrInvalidRequest,
 				"invalid request body",
 			)
 			return
@@ -39,6 +41,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
+				ErrInvalidRequest,
 				"invalid request body",
 			)
 			return
@@ -52,7 +55,8 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusNotImplemented,
-				"payment intent creation is not implementd",
+				ErrNotImplemented,
+				"payment intent creation is not implemented",
 			)
 			return
 		}
@@ -61,6 +65,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusInternalServerError,
+				ErrInternal,
 				"internal server error",
 			)
 			return
@@ -80,11 +85,11 @@ func getPaymentIntentHandler(c *gin.Context) {
 	id := strings.TrimSpace(c.Param("id"))
 
 	if id == "" {
-		writeError(c, http.StatusBadRequest, "payment intent id is required")
+		writeError(c, http.StatusBadRequest, ErrValidation, "payment intent id is required")
 		return
 	}
 
 	writeError(
-		c, http.StatusNotImplemented, "payment intent lookup is not implemented",
+		c, http.StatusNotImplemented, ErrNotImplemented, "payment intent lookup is not implemented",
 	)
 }
