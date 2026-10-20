@@ -46,6 +46,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			return
 
 		}
+
 		request.MerchantRef = strings.TrimSpace(request.MerchantRef)
 		request.CustomerRef = strings.TrimSpace(request.CustomerRef)
 
@@ -54,7 +55,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				c,
 				http.StatusBadRequest,
 				ErrInvalidRequest,
-				"invalid request body",
+				"Marchant reference is required",
 			)
 			return
 		}
@@ -62,7 +63,13 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		metadata := buildRequestMetadata(c)
 		_ = metadata
 
-		result, err := useCase.CreatePaymentIntent(c.Request.Context())
+		input := application.CreatePaymentIntentInput{
+			MerchantRef: request.MerchantRef,
+			CustomerRef: request.CustomerRef,
+			Amount:      int(request.Amount),
+		}
+
+		result, err := useCase.CreatePaymentIntent(c.Request.Context(), input)
 		if errors.Is(err, application.ErrNotImplemented) {
 			writeError(
 				c,
@@ -84,7 +91,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		}
 
 		response := dto.CreatePaymentIntentResponse{
-			Status: dto.PaymentIntentStatusPlaceHolder,
+			Status: dto.PaymentIntentStatus(result.Status),
 			ID:     result.ID,
 		}
 
