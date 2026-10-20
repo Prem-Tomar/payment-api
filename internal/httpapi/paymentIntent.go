@@ -8,6 +8,7 @@ import (
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) gin.HandlerFunc {
@@ -25,6 +26,17 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				)
 				return
 			}
+			var validationErrors validator.ValidationErrors
+			if errors.As(err, &validationErrors) {
+				writeError(
+					c,
+					http.StatusBadRequest,
+					ErrValidation,
+					"Request field failed valiation.",
+				)
+				return
+			}
+
 			writeError(
 				c,
 				http.StatusBadRequest,
