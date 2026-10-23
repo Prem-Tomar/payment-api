@@ -9,15 +9,9 @@ type CreatePaymentIntentRequest struct {
 }
 
 type CreatePaymentIntentResponse struct {
-	Status PaymentIntentStatus `json:"status"`
-	ID     string              `json:"id"`
+	Status string `json:"status"`
+	ID     string `json:"id"`
 }
-
-type PaymentIntentStatus string
-
-const (
-	PaymentIntentStatusPlaceHolder PaymentIntentStatus = "placeholder"
-)
 
 type PaymentMethodType string
 

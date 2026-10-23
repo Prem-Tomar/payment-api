@@ -15,7 +15,7 @@ type CreatePaymentIntentInput struct {
 
 type CreatePaymentIntentResult struct {
 	ID      string
-	Status  string
+	Status  PaymentIntentState
 	Message string
 }
 
@@ -35,7 +35,7 @@ func (PaymentIntentService) CreatePaymentIntent(ctx context.Context, input Creat
 
 	return CreatePaymentIntentResult{
 		ID:      "pi_placeholder_001",
-		Status:  "placeholder",
+		Status:  PaymentIntentStateCreated,
 		Message: "Payment intent creation is not implemented.",
 	}, nil
 }
@@ -49,7 +49,7 @@ func (FakePaymentIntentService) CreatePaymentIntent(ctx context.Context, input C
 
 	return CreatePaymentIntentResult{
 		ID:      "fake-payment-intent-001",
-		Status:  "placeholder",
+		Status:  PaymentIntentStateCreated,
 		Message: "Fake payment intent result.",
 	}, nil
 }
