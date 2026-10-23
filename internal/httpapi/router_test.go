@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"encoding/json"
 	"io"
 	"log/slog"
 	"net/http"
@@ -72,7 +73,7 @@ func TestMethodNotAllowedResponse(t *testing.T) {
 	if got := rec.Header().Get("Allow"); got != "GET" {
 		t.Fatalf("expected Allow header GET, got %q", got)
 	}
-	if want := `{"error":"method not allowed"}`; rec.Body.String() != want {
+	if want := `{"code":"METHOD_NOT_ALLOWED","error":"method not allowed"}`; rec.Body.String() != want {
 		t.Fatalf("expected body %q, got %q", want, rec.Body.String())
 	}
 }
@@ -88,7 +89,44 @@ func TestBodyLimitRejectsDeclaredOversizedRequest(t *testing.T) {
 	if rec.Code != http.StatusRequestEntityTooLarge {
 		t.Fatalf("expected status %d, got %d", http.StatusRequestEntityTooLarge, rec.Code)
 	}
-	if want := `{"error":"request body too large"}`; rec.Body.String() != want {
+	if want := `{"code":"REQUEST_TOO_LARGE","error":"request body too large"}`; rec.Body.String() != want {
 		t.Fatalf("expected body %q, got %q", want, rec.Body.String())
+	}
+}
+
+func TestPaymentIntentErrorCodes(t *testing.T) {
+	tests := []struct {
+		name string
+		body string
+		code string
+	}{
+		{name: "malformed JSON", body: `{"amount":`, code: "INVALID_REQUEST"},
+		{name: "invalid amount", body: `{"amount":0,"currency":"USD","payment_method":"card","merchant_ref":"order-1"}`, code: "VALIDATION_ERR"},
+		{name: "blank merchant reference", body: `{"amount":100,"currency":"USD","payment_method":"card","merchant_ref":"   "}`, code: "VALIDATION_ERR"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			router := testRouter()
+			req := httptest.NewRequest(http.MethodPost, "/v1/payment-intents", strings.NewReader(tt.body))
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("X-API-Key", "test-key")
+			req.Header.Set("X-Merchant-ID", "merchant-1")
+			req.Header.Set("Idempotency-Key", "request-1")
+			rec := httptest.NewRecorder()
+			router.ServeHTTP(rec, req)
+			if rec.Code != http.StatusBadRequest {
+				t.Fatalf("expected status 400, got %d: %s", rec.Code, rec.Body.String())
+			}
+			var response struct {
+				Code string `json:"code"`
+			}
+			if err := json.Unmarshal(rec.Body.Bytes(), &response); err != nil {
+				t.Fatal(err)
+			}
+			if response.Code != tt.code {
+				t.Fatalf("expected code %q, got %q", tt.code, response.Code)
+			}
+		})
 	}
 }

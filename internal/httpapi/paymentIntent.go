@@ -8,6 +8,7 @@ import (
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) gin.HandlerFunc {
@@ -20,18 +21,32 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				writeError(
 					c,
 					http.StatusRequestEntityTooLarge,
+					ErrRequestTooLarge,
 					"Request body to large",
 				)
 				return
 			}
+			var validationErrors validator.ValidationErrors
+			if errors.As(err, &validationErrors) {
+				writeError(
+					c,
+					http.StatusBadRequest,
+					ErrValidation,
+					"Request field failed valiation.",
+				)
+				return
+			}
+
 			writeError(
 				c,
 				http.StatusBadRequest,
+				ErrInvalidRequest,
 				"invalid request body",
 			)
 			return
 
 		}
+
 		request.MerchantRef = strings.TrimSpace(request.MerchantRef)
 		request.CustomerRef = strings.TrimSpace(request.CustomerRef)
 
@@ -39,7 +54,8 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
-				"invalid request body",
+				ErrInvalidRequest,
+				"Marchant reference is required",
 			)
 			return
 		}
@@ -47,12 +63,19 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		metadata := buildRequestMetadata(c)
 		_ = metadata
 
-		result, err := useCase.CreatePaymentIntent(c.Request.Context())
+		input := application.CreatePaymentIntentInput{
+			MerchantRef: request.MerchantRef,
+			CustomerRef: request.CustomerRef,
+			Amount:      int(request.Amount),
+		}
+
+		result, err := useCase.CreatePaymentIntent(c.Request.Context(), input)
 		if errors.Is(err, application.ErrNotImplemented) {
 			writeError(
 				c,
 				http.StatusNotImplemented,
-				"payment intent creation is not implementd",
+				ErrNotImplemented,
+				"payment intent creation is not implemented",
 			)
 			return
 		}
@@ -61,13 +84,14 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusInternalServerError,
+				ErrInternal,
 				"internal server error",
 			)
 			return
 		}
 
 		response := dto.CreatePaymentIntentResponse{
-			Status: dto.PaymentIntentStatusPlaceHolder,
+			Status: string(result.Status),
 			ID:     result.ID,
 		}
 
@@ -76,15 +100,47 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 	}
 }
 
-func getPaymentIntentHandler(c *gin.Context) {
-	id := strings.TrimSpace(c.Param("id"))
+func getPaymentIntentHandler(useCase application.GetPaymentIntentUseCase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := strings.TrimSpace(c.Param("id"))
 
-	if id == "" {
-		writeError(c, http.StatusBadRequest, "payment intent id is required")
-		return
+		if id == "" {
+			writeError(
+				c,
+				http.StatusBadRequest,
+				ErrValidation,
+				"payment intent id is required",
+			)
+			return
+		}
+
+		result, err := useCase.GetPaymentIntent(
+			c.Request.Context(),
+			id,
+		)
+
+		if errors.Is(err, application.ErrPaymentIntentNotFound) {
+			writeError(
+				c,
+				http.StatusNotFound,
+				ErrorNotFound,
+				"payment intent not found",
+			)
+			return
+		}
+
+		if err != nil {
+			writeError(
+				c,
+				http.StatusInternalServerError,
+				ErrInternal,
+				"unable to retrieve payment intent",
+			)
+			return
+		}
+
+		c.JSON(http.StatusOK, dto.GetPaymentIntentResponse{
+			ID: result.ID,
+		})
 	}
-
-	writeError(
-		c, http.StatusNotImplemented, "payment intent lookup is not implemented",
-	)
 }
