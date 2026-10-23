@@ -24,3 +24,7 @@ type PaymentMethodType string
 const (
 	PaymentMethodCard PaymentMethodType = "card"
 )
+
+type GetPaymentIntentResponse struct {
+	ID string `json:"id"`
+}

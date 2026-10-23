@@ -100,15 +100,47 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 	}
 }
 
-func getPaymentIntentHandler(c *gin.Context) {
-	id := strings.TrimSpace(c.Param("id"))
+func getPaymentIntentHandler(useCase application.GetPaymentIntentUseCase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := strings.TrimSpace(c.Param("id"))
 
-	if id == "" {
-		writeError(c, http.StatusBadRequest, ErrValidation, "payment intent id is required")
-		return
+		if id == "" {
+			writeError(
+				c,
+				http.StatusBadRequest,
+				ErrValidation,
+				"payment intent id is required",
+			)
+			return
+		}
+
+		result, err := useCase.GetPaymentIntent(
+			c.Request.Context(),
+			id,
+		)
+
+		if errors.Is(err, application.ErrPaymentIntentNotFound) {
+			writeError(
+				c,
+				http.StatusNotFound,
+				ErrorNotFound,
+				"payment intent not found",
+			)
+			return
+		}
+
+		if err != nil {
+			writeError(
+				c,
+				http.StatusInternalServerError,
+				ErrInternal,
+				"unable to retrieve payment intent",
+			)
+			return
+		}
+
+		c.JSON(http.StatusOK, dto.GetPaymentIntentResponse{
+			ID: result.ID,
+		})
 	}
-
-	writeError(
-		c, http.StatusNotImplemented, ErrNotImplemented, "payment intent lookup is not implemented",
-	)
 }

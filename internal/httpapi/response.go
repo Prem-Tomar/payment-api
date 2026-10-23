@@ -12,7 +12,7 @@ const (
 	ErrValidation            APIErrorCode = "VALIDATION_ERR"
 	ErrNotImplemented        APIErrorCode = "NOT_IMPLEMENTED"
 	ErrInternal              APIErrorCode = "INTERNAL_ERROR"
-	ErronNotFound            APIErrorCode = "NOT_FOUND"
+	ErrorNotFound            APIErrorCode = "NOT_FOUND"
 	ErrGatewayTimeout        APIErrorCode = "GATEWAY_TIMEOUT"
 	ErrMethodNotAllowed      APIErrorCode = "METHOD_NOT_ALLOWED"
 	ErrServiceUnavailable    APIErrorCode = "SERVICE_UNAVAILABLE"
