@@ -111,6 +111,16 @@ reviewer feedback from it; never silently replace it or write an answer on the d
 Assess both the mechanism and the engineering reasoning: assumptions, failure cases, tradeoffs,
 observable consequences, and verification. Do not grade only terminology or predicted output.
 
+Make the explanation granular enough to support every claim in the feedback. For each relevant
+statement, explain what it does, why the language or system behaves that way, the state before
+and after it, and what the caller or observer sees. When tracing code, include implicit behavior
+such as zero initialization and distinguish argument evaluation, assignment, deferred invocation,
+and returning control to the caller. For example, explain why a named `int` result starts at 0
+and why its first assignment changes it to 1; do not simply label an answer wrong. For service
+and payment concepts, trace the corresponding request, state, and failure sequence with the same
+care. Separate guaranteed behavior from assumptions and design choices. Preserve the original
+answer and add this reasoning as reviewer feedback; do not invent the developer's response.
+
 Record the implementation verdict separately. A missing, incomplete, or incorrect answer, or a
 pending answer review, must not block a PR whose implementation is correct and passes the normal
 implementation checks. Leave learning follow-up in the issue or PR, including after merge when

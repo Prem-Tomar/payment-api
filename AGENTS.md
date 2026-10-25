@@ -23,6 +23,11 @@ Use a review branch and PR; do not push or merge directly to `main` without Prem
   An issue-only answer or a link to an issue answer does not satisfy this rule. For a PR covering
   multiple issues, include and answer each issue's question separately.
 - Review the answer for correctness and explain any corrections alongside the original answer.
+- Make feedback granular: explain each claim's mechanism, starting state, state changes, timing,
+  and observable consequence. Trace relevant code statement by statement; explain why values
+  arise (including zero initialization), rather than only naming the correct value. Distinguish
+  evaluation, assignment, deferred invocation, and return to the caller where relevant. Apply
+  the same causal detail to service and payment concepts, not just Go execution examples.
 - A missing, incomplete, or incorrect answer, or a pending answer review, never blocks merging
   an otherwise correct implementation. Keep learning feedback separate from implementation
   findings and merge decisions. Do not add a required CI check for the answer.
