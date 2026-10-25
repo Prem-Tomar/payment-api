@@ -54,19 +54,32 @@ Use the same learning style as the Rust track:
 ## Question of the Day
 
 Starting with G40, every new issue includes one focused question phrased as an interviewer asking
-the developer to explain a previously covered topic. This is a recall and reasoning exercise,
+the developer to explain code from previous completed implementations or payment-system concepts
+already learned in this project. Questions
+must not cover future topics, roadmap tasks, or the new implementation being assigned.
+This is a recall and reasoning exercise,
 not another implementation requirement. Existing issues are updated when requested.
 
 ### Choosing the Question
 
-- Check earlier issues, implementations, and review discussions to confirm the topic was covered.
-- Name the earlier topic and link its issue. Use a concrete scenario and ask the developer to
+- Check the existing code and earlier implementation reviews to confirm the work was completed.
+  An issue's existence or a planning discussion alone does not make a topic eligible.
+- Payment-system knowledge is also eligible when earlier implementation work, an issue explanation,
+  or a review shows that the concept was already learned. Rotate between language mechanics,
+  service design, and payment reasoning. Examples to verify against that learning history include
+  idempotency and retries, payment intents versus actual money movement, merchant boundaries,
+  and transport validation versus financial invariants. Do not introduce future payment topics
+  merely because they are common interview subjects or appear in the roadmap.
+- Name the earlier implemented topic or learned payment concept, link its issue or PR, and identify
+  the relevant code path or earlier conceptual explanation.
+  Use a concrete scenario grounded in that implementation and ask the developer to
   explain why something works, a tradeoff, or a failure case in their own words.
-- Rotate across all covered topics over successive issues: Go service boundaries and packages;
+- Rotate across completed implementations over successive issues: Go service boundaries and packages;
   HTTP routes and responses; middleware order, request IDs and logging; configuration, timeouts
   and shutdown; health and readiness; request parsing, validation and body limits; idempotency;
   API-key and merchant boundaries; rate limiting; application interfaces, stores and state models.
-  Add later topics only after they have been covered. One issue does not need to cover everything.
+  This list is a selection guide, not a claim that every topic is complete. Add later topics only
+  after their implementation is completed. One issue does not need to cover everything.
 - Inspect recent questions before choosing the next one. Revisit a weak answer later with a
   different scenario. Do not paste a model answer into the question or ask for out-of-scope code.
 - Aim for staff/principal-level reasoning through depth, not obscure trivia or unlearned technology.
@@ -76,7 +89,7 @@ not another implementation requirement. Existing issues are updated when request
   Use two or three follow-up prompts within the same scenario rather than a disconnected quiz.
   Distinguish language guarantees, assumptions, and design choices; accept well-reasoned alternatives.
   Examples such as `defer` timing or panic recovery illustrate the expected depth, not a fixed
-  syllabus. Apply this questioning standard across every previously covered topic.
+  syllabus. Apply this questioning standard across previous implementations and learned payment concepts.
 - Use `.github/ISSUE_TEMPLATE/learning_task.md` when drafting issues. Include the same sections
   when using an API or other tool that bypasses GitHub templates.
 
@@ -107,9 +120,11 @@ rules and explain the concrete implementation impact separately.
 
 ### First Question: G40
 
-Previously covered topic: Go `defer`, used for shutdown/context cleanup in
+Previous implementation: Go `defer`, used for shutdown/context cleanup in
 [G2](https://github.com/Prem-Tomar/payment-api/issues/4), and final-outcome logging in
 [G5](https://github.com/Prem-Tomar/payment-api/issues/7).
+Existing code: `main.go` (`defer stop()` and `defer cancel()`) and
+`internal/middlewares/accessLogs.go` (logging after the handler completes).
 
 **Interviewer asks:** A teammate says, "A deferred function runs after the function has returned,
 so it cannot change the result received by the caller." Review that claim using this example:

@@ -32,10 +32,13 @@ assignees: ''
 
 ## Question of the Day
 
-**Previously covered topic and issue:** <!-- Name and link an earlier topic. -->
+**Previous implementation or learned payment concept:** <!-- Name the topic, link its issue or PR,
+and identify the existing code path or earlier conceptual explanation. Verify that it was already
+implemented or learned; do not select future topics, roadmap tasks, or the new task being assigned. -->
 
 **Interviewer asks:** <!-- Write one focused scenario with progressive follow-ups before opening the issue.
-Rotate across previously covered topics; see docs/understanding.md#question-of-the-day.
+Rotate across Go mechanics, service design, and payment concepts already learned;
+see docs/understanding.md#question-of-the-day.
 Start with a commonly missed mechanism, then probe failure modes, ownership, tradeoffs,
 observability, and verification as relevant. Aim for staff/principal-level reasoning, not trivia.
 Do not leave this placeholder or supply the answer. -->

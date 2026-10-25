@@ -6,11 +6,15 @@ Use a review branch and PR; do not push or merge directly to `main` without Prem
 
 ## Question of the day
 
-- Every new issue must include one interviewer-style question about previously covered topics,
+- Every new issue must include one interviewer-style question about previous completed implementations
+  or payment-system concepts already learned in this project,
   using the workflow in `docs/understanding.md`. This applies to issues created through tools
   as well as the GitHub issue template.
-- Identify the earlier topic and issue. Rotate across the learning history, rather than asking
-  only about the new implementation. Do not invent a developer answer.
+- Identify the earlier implemented topic, its issue or PR, and the relevant code path. Verify that
+  the implementation exists; a roadmap item, open task, or discussion alone is not evidence of
+  completion. For a payment concept, cite the earlier implementation, issue, or review where it
+  was learned. Rotate across Go mechanics, service design, and payment-system reasoning. Do not
+  ask about future topics or treat the newly assigned task as prior learning. Never invent an answer.
 - Probe commonly missed mechanisms and staff/principal-level judgment: failure modes, ownership,
   tradeoffs, observability, and verification. Use a focused scenario with progressive follow-ups;
   avoid trivia-only questions and assess reasoning as well as factual accuracy.

@@ -8,7 +8,8 @@
 
 ## Question of the Day
 
-**Issue and previous topic:** <!-- Link the issue containing the question. -->
+**Issue and previous implementation or payment concept:** <!-- Link the issue containing the question
+and identify the earlier code path or learned concept it revisits. No future topics. -->
 
 **Interviewer asks:** <!-- Copy the exact question from the issue. If this PR covers multiple
 issues with different questions, repeat this block per question. Do not invent a learner answer. -->
