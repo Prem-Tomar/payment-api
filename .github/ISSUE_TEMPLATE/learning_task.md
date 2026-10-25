@@ -1,0 +1,54 @@
+---
+name: Learning task with question of the day
+about: A small implementation task plus recall of a previously covered topic
+title: 'Day G: '
+labels: ''
+assignees: ''
+---
+
+## Goal
+
+<!-- Explain the problem this small task solves. -->
+
+## Context
+
+<!-- Explain the relevant concepts in plain language. -->
+
+## Implementation Task
+
+<!-- Describe the implementation and keep its scope small. -->
+
+## Acceptance Criteria
+
+<!-- List implementation criteria. Do not make the learning answer a merge gate. -->
+
+## Scope
+
+<!-- State exclusions. Keep tests and documentation reviewer-owned where applicable. -->
+
+## Research Hints
+
+<!-- Provide useful search terms for the implementation. -->
+
+## Question of the Day
+
+**Previous implementation or learned payment concept:** <!-- Name the topic, link its issue or PR,
+and identify the existing code path or earlier conceptual explanation. Verify that it was already
+implemented or learned; do not select future topics, roadmap tasks, or the new task being assigned. -->
+
+**Interviewer asks:** <!-- Write one focused scenario with progressive follow-ups before opening the issue.
+Rotate across Go mechanics, service design, and payment concepts already learned;
+see docs/understanding.md#question-of-the-day.
+Start with a commonly missed mechanism, then probe failure modes, ownership, tradeoffs,
+observability, and verification as relevant. Aim for staff/principal-level reasoning, not trivia.
+Do not leave this placeholder or supply the answer. -->
+
+**Developer answer:** You must answer this question in your own words directly in the associated
+PR description or a PR comment. The exact question must also appear in that PR. An issue-only
+answer or a link to an issue answer is not sufficient. If the PR covers multiple issues, answer
+each issue's question separately.
+
+**Learning review:** The reviewer will mark the answer Correct, Partially correct, Needs
+correction, or Awaiting answer, and explain corrections alongside the original answer.
+A missing or incorrect answer, or a pending answer review, does not block merging an otherwise
+correct implementation. Implementation acceptance criteria still apply.
