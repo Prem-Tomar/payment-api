@@ -82,10 +82,13 @@ not another implementation requirement. Existing issues are updated when request
 
 ### Answering and Reviewing
 
-The developer must provide an answer in their own words in an issue comment or the associated
-PR's **Question of the day** section. Include the question in the PR too; a link to the issue
-answer is sufficient and avoids answering twice. Explain the reasoning and give a small example
-where useful. This does not add a learner-written test or repository documentation deliverable.
+Starting with G40, the developer must answer every question in their own words directly in the
+associated PR's **Question of the day** section or a PR comment. Repeat the exact issue question
+in the PR. An answer only in the issue, or a link to that answer, does not satisfy this rule;
+bring the answer into the PR so implementation and learning review are visible together. For a
+PR covering multiple issues, include and answer each issue's question separately. Explain the
+reasoning and give a small example where useful. This does not add a learner-written test or
+repository documentation deliverable.
 
 During review, record the question/answer link and one learning result: **Correct**, **Partially
 correct**, **Needs correction**, or **Awaiting answer**. Explain what is right, what needs changing,

@@ -40,8 +40,10 @@ Start with a commonly missed mechanism, then probe failure modes, ownership, tra
 observability, and verification as relevant. Aim for staff/principal-level reasoning, not trivia.
 Do not leave this placeholder or supply the answer. -->
 
-**Developer answer:** Answer in your own words in a comment or the associated PR. The same
-question will be included in the PR; linking an existing answer is sufficient.
+**Developer answer:** You must answer this question in your own words directly in the associated
+PR description or a PR comment. The exact question must also appear in that PR. An issue-only
+answer or a link to an issue answer is not sufficient. If the PR covers multiple issues, answer
+each issue's question separately.
 
 **Learning review:** The reviewer will mark the answer Correct, Partially correct, Needs
 correction, or Awaiting answer, and explain corrections alongside the original answer.

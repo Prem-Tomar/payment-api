@@ -13,7 +13,9 @@
 **Interviewer asks:** <!-- Copy the exact question from the issue. If this PR covers multiple
 issues with different questions, repeat this block per question. Do not invent a learner answer. -->
 
-**Developer answer:** <!-- Answer in your own words or link your existing issue answer. -->
+**Developer answer (required learning response):** <!-- Answer directly here in your own words,
+or link a comment containing your answer in this PR. An issue-only answer or link is not sufficient.
+Answer every issue question included in this PR separately. -->
 
 **Learning review (reviewer):** <!-- Correct / Partially correct / Needs correction /
 Awaiting answer. Add reasoning in review or link the feedback here. -->

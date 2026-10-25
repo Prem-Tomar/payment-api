@@ -32,9 +32,10 @@ Those remain Rust-owned unless the architecture is explicitly changed.
 No direct merges or pushes to `main` are allowed unless Prem explicitly approves that specific
 case. Normal work must happen through a review branch and GitHub pull request.
 
-Every new issue includes a **Question of the day** about a previously covered topic. The developer
-answers it in the issue or associated PR, and the reviewer checks the answer and adds corrections
-when needed. This learning feedback never blocks merging an otherwise correct implementation.
+Starting with G40, every new issue includes an interview-style **Question of the day** about a
+previously covered topic. Repeat each question in the associated PR; the developer must answer
+every question directly in the PR. The reviewer checks each answer and adds corrections when
+needed. This learning feedback never blocks merging an otherwise correct implementation.
 See [the question workflow](docs/understanding.md#question-of-the-day) and the issue/PR templates.
 
 ## Validation Rule

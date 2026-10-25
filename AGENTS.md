@@ -14,8 +14,10 @@ Use a review branch and PR; do not push or merge directly to `main` without Prem
 - Probe commonly missed mechanisms and staff/principal-level judgment: failure modes, ownership,
   tradeoffs, observability, and verification. Use a focused scenario with progressive follow-ups;
   avoid trivia-only questions and assess reasoning as well as factual accuracy.
-- Repeat the same question in the associated PR and ask the developer to answer it. A linked
-  answer from the issue is sufficient; do not require duplicate answers.
+- Starting with G40, repeat each issue's exact question in the associated PR. The developer must
+  answer every question directly in the PR description or a PR comment, in their own words.
+  An issue-only answer or a link to an issue answer does not satisfy this rule. For a PR covering
+  multiple issues, include and answer each issue's question separately.
 - Review the answer for correctness and explain any corrections alongside the original answer.
 - A missing, incomplete, or incorrect answer, or a pending answer review, never blocks merging
   an otherwise correct implementation. Keep learning feedback separate from implementation
