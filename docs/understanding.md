@@ -120,6 +120,11 @@ and why its first assignment changes it to 1; do not simply label an answer wron
 and payment concepts, trace the corresponding request, state, and failure sequence with the same
 care. Separate guaranteed behavior from assumptions and design choices. Preserve the original
 answer and add this reasoning as reviewer feedback; do not invent the developer's response.
+For execution-order feedback, also include an annotated code snippet with numbered runtime steps
+and a compact arrow diagram (plain text or Mermaid) showing the execution sequence and state
+changes. Distinguish registering work from executing it, and show when observable output occurs.
+Use the same step numbers in the code, diagram, and any accompanying table so the developer can
+follow the explanation visually. Apply comparable visuals to service/payment flows when useful.
 
 Record the implementation verdict separately. A missing, incomplete, or incorrect answer, or a
 pending answer review, must not block a PR whose implementation is correct and passes the normal

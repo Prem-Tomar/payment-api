@@ -28,6 +28,9 @@ Use a review branch and PR; do not push or merge directly to `main` without Prem
   arise (including zero initialization), rather than only naming the correct value. Distinguish
   evaluation, assignment, deferred invocation, and return to the caller where relevant. Apply
   the same causal detail to service and payment concepts, not just Go execution examples.
+- For execution-order explanations, include the relevant code annotated with numbered runtime
+  steps and a compact arrow diagram or equivalent visual trace. Show state changes, deferred
+  registration versus execution, and observable output. Keep visual labels consistent with the prose.
 - A missing, incomplete, or incorrect answer, or a pending answer review, never blocks merging
   an otherwise correct implementation. Keep learning feedback separate from implementation
   findings and merge decisions. Do not add a required CI check for the answer.
