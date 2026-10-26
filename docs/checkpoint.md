@@ -66,6 +66,15 @@ Do not confuse passing checks on the documentation branch with passing checks on
 
 ## Operational decisions and handoff
 
+- Latest publication rule, 26 October 2026: use the shared Payment Portfolio Publisher. Notify it
+  silently after saving meaningful progress; do not wait or poll for completion. Completion,
+  failure, and required-action updates return through chat messages only. Continue independent
+  work, distinguish delegated work from verified publication, and avoid acknowledgement loops.
+  The user explicitly authorizes both the handoff and the publisher's chat reply. See AGENTS.md.
+- After the parked state above, Prem explicitly requested merging PR #68. The publisher reported
+  the verified squash merge as `7d5a22e`. The old local branch may still be checked out; do not
+  publish further commits onto that already merged PR. The publisher owns branch preparation for
+  subsequent ready edits and must preserve unfinished work.
 - At Prem's explicit request, administrator enforcement of `main` protection was disabled.
   The one-approval requirement and other protection settings were retained. This permits an admin
   override; it does not remove review requirements for non-admin developers. No PR was merged by
