@@ -1,6 +1,7 @@
 # Payment API working rules
 
 Read `README.md` and `docs/understanding.md` before creating learning issues or reviewing PRs.
+Read `docs/checkpoint.md` for the latest parked session and verify live PR state before resuming.
 Keep work within this repository and the task's stated learning scope.
 Use a review branch and PR; do not push or merge directly to `main` without Prem's specific approval.
 
@@ -28,6 +29,9 @@ Use a review branch and PR; do not push or merge directly to `main` without Prem
   arise (including zero initialization), rather than only naming the correct value. Distinguish
   evaluation, assignment, deferred invocation, and return to the caller where relevant. Apply
   the same causal detail to service and payment concepts, not just Go execution examples.
+- Define prerequisite terms and declarations before using them in an explanation. Explain the
+  rule connecting each step, not just its outcome: for example, what a named result variable is,
+  how the output declaration creates it, and why an explicit return assigns to it before defers.
 - For execution-order explanations, include the relevant code annotated with numbered runtime
   steps and a compact arrow diagram or equivalent visual trace. Show state changes, deferred
   registration versus execution, and observable output. Keep visual labels consistent with the prose.

@@ -120,6 +120,11 @@ and why its first assignment changes it to 1; do not simply label an answer wron
 and payment concepts, trace the corresponding request, state, and failure sequence with the same
 care. Separate guaranteed behavior from assumptions and design choices. Preserve the original
 answer and add this reasoning as reviewer feedback; do not invent the developer's response.
+Define prerequisite terms, symbols, types, and declarations before relying on them. For example,
+explain that `(result int)` declares an output variable, and that explicit return expressions are
+assigned to the corresponding result parameters before deferred calls run. Merely saying
+"return 5 makes result 5" omits the language rule the learner needs to understand. Use comparable
+foundational detail for mathematical, service, and payment-system explanations.
 For execution-order feedback, also include an annotated code snippet with numbered runtime steps
 and a compact arrow diagram (plain text or Mermaid) showing the execution sequence and state
 changes. Distinguish registering work from executing it, and show when observable output occurs.
