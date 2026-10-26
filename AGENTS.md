@@ -5,6 +5,23 @@ Read `docs/checkpoint.md` for the latest parked session and verify live PR state
 Keep work within this repository and the task's stated learning scope.
 Use a review branch and PR; do not push or merge directly to `main` without Prem's specific approval.
 
+## Publication handoff
+
+- Use the shared Payment Portfolio Publisher for publication Git mutations. Keep machine-specific
+  task routing in the project's ignored coordination record, not in portable repository rules.
+- Immediately after saving meaningful progress or a checkpoint, silently notify that publisher
+  with the repository, current branch, intended PR, and relevant scope. The user authorizes these
+  handoffs; do not wait for a separate Park/Push request or manufacture changes just to notify it.
+- Do not narrate routine delegation, wait for publication to finish, or poll the publisher's task
+  or Git state for completion. Continue independent work; if the requested local work is finished,
+  end the turn without waiting for Git operations.
+- The user authorizes the publisher to send completion, failure, or required-action updates back
+  to the originating work task through chat messages only. Do not request tool-status callbacks,
+  acknowledgement loops, or repeated status checks. A chat update need not trigger a reply.
+- A sent handoff is not proof of publication. Report a commit, push, or merge as completed only
+  after the publisher reports verification. Preserve existing scope and branch/merge permissions;
+  publication routing by itself never authorizes merging a PR or changing `main`.
+
 ## Question of the day
 
 - Every new issue must include one interviewer-style question about previous completed implementations
