@@ -22,4 +22,5 @@ func registerV1Routes(router *gin.Engine,
 
 	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(createUseCase))
 	v1.GET("/payment-intents/:id", getPaymentIntentHandler(getUseCase))
+	v1.POST("/payment-intents/:id/confirm", requireIdempotencyKey, confirmPaymentIntentHandler)
 }

@@ -144,3 +144,25 @@ func getPaymentIntentHandler(useCase application.GetPaymentIntentUseCase) gin.Ha
 		})
 	}
 }
+
+func confirmPaymentIntentHandler(c *gin.Context) {
+
+	id := strings.TrimSpace(c.Param("id"))
+
+	if id == "" {
+		writeError(
+			c,
+			http.StatusBadRequest,
+			ErrValidation,
+			"payment intent id is required",
+		)
+		return
+	}
+
+	writeError(
+		c,
+		http.StatusNotImplemented,
+		ErrNotImplemented,
+		"payment intent confirmation is not implemented",
+	)
+}
