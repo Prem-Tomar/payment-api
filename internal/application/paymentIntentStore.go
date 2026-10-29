@@ -3,7 +3,8 @@ package application
 import "context"
 
 type PaymentIntentRecord struct {
-	ID string
+	ID         string
+	MerchantID string
 }
 
 type PaymentIntentStore interface {
@@ -14,6 +15,7 @@ type PaymentIntentStore interface {
 
 	Get(
 		ctx context.Context,
+		merchantID string,
 		id string,
 	) (PaymentIntentRecord, bool, error)
 }

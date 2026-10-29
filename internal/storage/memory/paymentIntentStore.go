@@ -7,15 +7,20 @@ import (
 	"github.com/Prem-Tomar/payment-api/internal/application"
 )
 
+type paymentIntentKey struct {
+	merchantID string
+	id         string
+}
+
 type PaymentIntentStore struct {
 	mu      sync.RWMutex
-	records map[string]application.PaymentIntentRecord
+	records map[paymentIntentKey]application.PaymentIntentRecord
 }
 
 func NewPaymentIntentStore() *PaymentIntentStore {
 	return &PaymentIntentStore{
 		records: make(
-			map[string]application.PaymentIntentRecord,
+			map[paymentIntentKey]application.PaymentIntentRecord,
 		),
 	}
 }
@@ -28,24 +33,33 @@ func (s *PaymentIntentStore) Save(
 		return err
 	}
 
+	key := paymentIntentKey{
+		merchantID: record.MerchantID,
+		id:         record.ID,
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.records[record.ID] = record
+	s.records[key] = record
 	return nil
 }
 
 func (s *PaymentIntentStore) Get(
 	ctx context.Context,
+	merchantID string,
 	id string,
 ) (application.PaymentIntentRecord, bool, error) {
 	if err := ctx.Err(); err != nil {
 		return application.PaymentIntentRecord{}, false, err
 	}
-
+	key := paymentIntentKey{
+		merchantID: merchantID,
+		id:         id,
+	}
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	record, ok := s.records[id]
+	record, ok := s.records[key]
 	return record, ok, nil
 }

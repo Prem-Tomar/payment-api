@@ -1,4 +1,3 @@
-
 package application
 
 import (
@@ -12,7 +11,6 @@ type IdempotencyRecord struct {
 	ResourceID  string
 	CreatedAt   time.Time
 }
-
 
 type IdempotencyRecordStore interface {
 	Get(

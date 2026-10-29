@@ -114,9 +114,14 @@ func getPaymentIntentHandler(useCase application.GetPaymentIntentUseCase) gin.Ha
 			return
 		}
 
+		metadata := buildRequestMetadata(c)
+
 		result, err := useCase.GetPaymentIntent(
 			c.Request.Context(),
-			id,
+			application.GetPaymentIntentInput{
+				ID:         id,
+				MerchantID: metadata.MerchantID,
+			},
 		)
 
 		if errors.Is(err, application.ErrPaymentIntentNotFound) {

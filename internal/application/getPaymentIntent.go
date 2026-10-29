@@ -10,9 +10,13 @@ var ErrPaymentIntentNotFound = errors.New("payment intent not found")
 type GetPaymentIntentResult struct {
 	ID string
 }
+type GetPaymentIntentInput struct {
+	ID         string
+	MerchantID string
+}
 
 type GetPaymentIntentUseCase interface {
-	GetPaymentIntent(ctx context.Context, id string) (GetPaymentIntentResult, error)
+	GetPaymentIntent(ctx context.Context, input GetPaymentIntentInput) (GetPaymentIntentResult, error)
 }
 
 type PaymentIntentQueryService struct {
@@ -25,8 +29,8 @@ func NewPaymentIntentQueryService(store PaymentIntentStore) *PaymentIntentQueryS
 	}
 }
 
-func (s *PaymentIntentQueryService) GetPaymentIntent(ctx context.Context, id string) (GetPaymentIntentResult, error) {
-	record, found, err := s.store.Get(ctx, id)
+func (s *PaymentIntentQueryService) GetPaymentIntent(ctx context.Context, input GetPaymentIntentInput) (GetPaymentIntentResult, error) {
+	record, found, err := s.store.Get(ctx, input.MerchantID, input.ID)
 	if err != nil {
 		return GetPaymentIntentResult{}, err
 	}
