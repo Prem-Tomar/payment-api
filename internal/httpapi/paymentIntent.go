@@ -59,10 +59,9 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			return
 		}
 
-		request.MerchantRef = strings.TrimSpace(request.MerchantRef)
-		request.CustomerRef = strings.TrimSpace(request.CustomerRef)
+		merchantRef, valid := normalizeReference(request.MerchantRef, true)
 
-		if request.MerchantRef == "" {
+		if !valid {
 			writeError(
 				c,
 				http.StatusBadRequest,
@@ -71,13 +70,14 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			)
 			return
 		}
+		customerRef, _ := normalizeReference(request.CustomerRef, false)
 
 		metadata := buildRequestMetadata(c)
 		_ = metadata
 
 		input := application.CreatePaymentIntentInput{
-			MerchantRef: request.MerchantRef,
-			CustomerRef: request.CustomerRef,
+			MerchantRef: merchantRef,
+			CustomerRef: customerRef,
 			Amount:      int(request.Amount),
 			Currency:    currency,
 		}
