@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -70,6 +71,25 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 		}
 
 		result, err := useCase.CreatePaymentIntent(c.Request.Context(), input)
+
+		if errors.Is(err, context.Canceled) {
+			writeError(
+				c,
+				499,
+				ErrRequestCanceled,
+				"request was canceled",
+			)
+			return
+		}
+
+		if errors.Is(err, context.DeadlineExceeded) {
+			writeError(
+				c,
+				http.StatusGatewayTimeout,
+				ErrGatewayTimeout,
+				"request deadline exceeded",
+			)
+		}
 		if errors.Is(err, application.ErrNotImplemented) {
 			writeError(
 				c,

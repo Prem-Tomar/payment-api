@@ -18,6 +18,7 @@ const (
 	ErrServiceUnavailable    APIErrorCode = "SERVICE_UNAVAILABLE"
 	ErrMissingIdempotencyKey APIErrorCode = "MISSING_IDEMPOTENCY_KEY"
 	ErrInvalidIdempotencyKey APIErrorCode = "INVALID_IDEMPOTENCY_KEY"
+	ErrRequestCanceled       APIErrorCode = "REQUEST_CANCELED"
 )
 
 type successResponse struct {
