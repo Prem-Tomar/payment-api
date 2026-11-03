@@ -48,6 +48,17 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 
 		}
 
+		currency, valid := normalizeCurrency(request.Currency)
+		if !valid {
+			writeError(
+				c,
+				http.StatusBadRequest,
+				ErrValidation,
+				"currency must contain exactly 3 English letters",
+			)
+			return
+		}
+
 		request.MerchantRef = strings.TrimSpace(request.MerchantRef)
 		request.CustomerRef = strings.TrimSpace(request.CustomerRef)
 
@@ -68,6 +79,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			MerchantRef: request.MerchantRef,
 			CustomerRef: request.CustomerRef,
 			Amount:      int(request.Amount),
+			Currency:    currency,
 		}
 
 		result, err := useCase.CreatePaymentIntent(c.Request.Context(), input)

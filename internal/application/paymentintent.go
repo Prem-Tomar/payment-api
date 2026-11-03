@@ -11,6 +11,7 @@ type CreatePaymentIntentInput struct {
 	MerchantRef string
 	CustomerRef string
 	Amount      int
+	Currency    string
 }
 
 type CreatePaymentIntentResult struct {
