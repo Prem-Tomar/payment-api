@@ -9,7 +9,6 @@ import (
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/httpapi/dto"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) gin.HandlerFunc {
@@ -27,14 +26,9 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				)
 				return
 			}
-			var validationErrors validator.ValidationErrors
-			if errors.As(err, &validationErrors) {
-				writeError(
-					c,
-					http.StatusBadRequest,
-					ErrValidation,
-					"Request field failed valiation.",
-				)
+
+			if code, message, ok := mapValidationError(err); ok {
+				writeError(c, http.StatusBadRequest, code, message)
 				return
 			}
 
@@ -53,7 +47,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
-				ErrValidation,
+				ErrInvalidCurrency,
 				"currency must contain exactly 3 English letters",
 			)
 			return
@@ -65,7 +59,7 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusBadRequest,
-				ErrInvalidRequest,
+				ErrInvalidReference,
 				"Marchant reference is required",
 			)
 			return

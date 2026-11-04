@@ -19,6 +19,10 @@ const (
 	ErrMissingIdempotencyKey APIErrorCode = "MISSING_IDEMPOTENCY_KEY"
 	ErrInvalidIdempotencyKey APIErrorCode = "INVALID_IDEMPOTENCY_KEY"
 	ErrRequestCanceled       APIErrorCode = "REQUEST_CANCELED"
+	ErrInvalidAmount         APIErrorCode = "INVALID_AMOUNT"
+	ErrInvalidCurrency       APIErrorCode = "INVALID_CURRENCY"
+	ErrInvalidPaymentMethod  APIErrorCode = "INVALID_PAYMENT_METHOD"
+	ErrInvalidReference      APIErrorCode = "INVALID_REFERENCE"
 )
 
 type successResponse struct {
