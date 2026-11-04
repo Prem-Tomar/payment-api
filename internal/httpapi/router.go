@@ -7,10 +7,14 @@ import (
 
 	"github.com/Prem-Tomar/payment-api/internal/application"
 	"github.com/Prem-Tomar/payment-api/internal/middlewares"
+	"github.com/Prem-Tomar/payment-api/internal/storage/memory"
 	"github.com/gin-gonic/gin"
 )
 
-func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase application.CreatePaymentIntentUseCase) *gin.Engine {
+func newRouter(logger *slog.Logger,
+	checker ReadinessChecker,
+	createUseCase application.CreatePaymentIntentUseCase,
+	getUseCase application.GetPaymentIntentUseCase) *gin.Engine {
 	router := gin.New()
 
 	// router.Use(gin.Recovery()) // added as it was in default not it new , for panic handling
@@ -24,7 +28,7 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase applicatio
 	router.Use(middlewares.AccessLogger(logger))
 
 	// Groups
-	registerV1Routes(router, useCase)
+	registerV1Routes(router, createUseCase, getUseCase)
 	// future public APIs
 
 	// checker := DefaultReadinessChecker{}
@@ -40,9 +44,11 @@ func newRouter(logger *slog.Logger, checker ReadinessChecker, useCase applicatio
 func NewRouter(logger *slog.Logger) *gin.Engine {
 	checker := DefaultReadinessChecker{}
 	// useCase := application.PaymentIntentService{}
-	useCase := application.FakePaymentIntentService{}
+	createUseCase := application.PaymentIntentService{}
+	store := memory.NewPaymentIntentStore()
+	getUseCase := application.NewPaymentIntentQueryService(store)
 
-	return newRouter(logger, checker, useCase)
+	return newRouter(logger, checker, createUseCase, getUseCase)
 }
 
 func healthHandler(context *gin.Context) {
@@ -53,7 +59,7 @@ func healthHandler(context *gin.Context) {
 func readyHandler(checker ReadinessChecker) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		if err := checker.Check(); err != nil {
-			writeError(context, http.StatusServiceUnavailable, "service unavailable")
+			writeError(context, http.StatusServiceUnavailable, ErrServiceUnavailable, "service unavailable")
 			return
 		}
 		writeSuccess(context, http.StatusOK, "ready")
@@ -63,9 +69,9 @@ func readyHandler(checker ReadinessChecker) gin.HandlerFunc {
 func methodNotAllow(context *gin.Context) {
 
 	context.Header("Allow", "GET")
-	writeError(context, http.StatusMethodNotAllowed, "method not allowed")
+	writeError(context, http.StatusMethodNotAllowed, ErrMethodNotAllowed, "method not allowed")
 }
 
 func noRouteHandler(context *gin.Context) {
-	writeError(context, http.StatusNotFound, "route not found")
+	writeError(context, http.StatusNotFound, ErrorNotFound, "route not found")
 }

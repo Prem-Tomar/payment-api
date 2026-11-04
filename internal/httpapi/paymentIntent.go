@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -20,39 +21,87 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 				writeError(
 					c,
 					http.StatusRequestEntityTooLarge,
+					ErrRequestTooLarge,
 					"Request body to large",
 				)
 				return
 			}
+
+			if code, message, ok := mapValidationError(err); ok {
+				writeError(c, http.StatusBadRequest, code, message)
+				return
+			}
+
 			writeError(
 				c,
 				http.StatusBadRequest,
+				ErrInvalidRequest,
 				"invalid request body",
 			)
 			return
 
 		}
-		request.MerchantRef = strings.TrimSpace(request.MerchantRef)
-		request.CustomerRef = strings.TrimSpace(request.CustomerRef)
 
-		if request.MerchantRef == "" {
+		currency, valid := normalizeCurrency(request.Currency)
+		if !valid {
 			writeError(
 				c,
 				http.StatusBadRequest,
-				"invalid request body",
+				ErrInvalidCurrency,
+				"currency must contain exactly 3 English letters",
 			)
 			return
 		}
+
+		merchantRef, valid := normalizeReference(request.MerchantRef, true)
+
+		if !valid {
+			writeError(
+				c,
+				http.StatusBadRequest,
+				ErrInvalidReference,
+				"Marchant reference is required",
+			)
+			return
+		}
+		customerRef, _ := normalizeReference(request.CustomerRef, false)
 
 		metadata := buildRequestMetadata(c)
 		_ = metadata
 
-		result, err := useCase.CreatePaymentIntent(c.Request.Context())
+		input := application.CreatePaymentIntentInput{
+			MerchantRef: merchantRef,
+			CustomerRef: customerRef,
+			Amount:      int(request.Amount),
+			Currency:    currency,
+		}
+
+		result, err := useCase.CreatePaymentIntent(c.Request.Context(), input)
+
+		if errors.Is(err, context.Canceled) {
+			writeError(
+				c,
+				499,
+				ErrRequestCanceled,
+				"request was canceled",
+			)
+			return
+		}
+
+		if errors.Is(err, context.DeadlineExceeded) {
+			writeError(
+				c,
+				http.StatusGatewayTimeout,
+				ErrGatewayTimeout,
+				"request deadline exceeded",
+			)
+		}
 		if errors.Is(err, application.ErrNotImplemented) {
 			writeError(
 				c,
 				http.StatusNotImplemented,
-				"payment intent creation is not implementd",
+				ErrNotImplemented,
+				"payment intent creation is not implemented",
 			)
 			return
 		}
@@ -61,13 +110,14 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 			writeError(
 				c,
 				http.StatusInternalServerError,
+				ErrInternal,
 				"internal server error",
 			)
 			return
 		}
 
 		response := dto.CreatePaymentIntentResponse{
-			Status: dto.PaymentIntentStatusPlaceHolder,
+			Status: string(result.Status),
 			ID:     result.ID,
 		}
 
@@ -76,15 +126,74 @@ func createPaymentIntentHandler(useCase application.CreatePaymentIntentUseCase) 
 	}
 }
 
-func getPaymentIntentHandler(c *gin.Context) {
+func getPaymentIntentHandler(useCase application.GetPaymentIntentUseCase) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := strings.TrimSpace(c.Param("id"))
+
+		if id == "" {
+			writeError(
+				c,
+				http.StatusBadRequest,
+				ErrValidation,
+				"payment intent id is required",
+			)
+			return
+		}
+
+		metadata := buildRequestMetadata(c)
+
+		result, err := useCase.GetPaymentIntent(
+			c.Request.Context(),
+			application.GetPaymentIntentInput{
+				ID:         id,
+				MerchantID: metadata.MerchantID,
+			},
+		)
+
+		if errors.Is(err, application.ErrPaymentIntentNotFound) {
+			writeError(
+				c,
+				http.StatusNotFound,
+				ErrorNotFound,
+				"payment intent not found",
+			)
+			return
+		}
+
+		if err != nil {
+			writeError(
+				c,
+				http.StatusInternalServerError,
+				ErrInternal,
+				"unable to retrieve payment intent",
+			)
+			return
+		}
+
+		c.JSON(http.StatusOK, dto.GetPaymentIntentResponse{
+			ID: result.ID,
+		})
+	}
+}
+
+func confirmPaymentIntentHandler(c *gin.Context) {
+
 	id := strings.TrimSpace(c.Param("id"))
 
 	if id == "" {
-		writeError(c, http.StatusBadRequest, "payment intent id is required")
+		writeError(
+			c,
+			http.StatusBadRequest,
+			ErrValidation,
+			"payment intent id is required",
+		)
 		return
 	}
 
 	writeError(
-		c, http.StatusNotImplemented, "payment intent lookup is not implemented",
+		c,
+		http.StatusNotImplemented,
+		ErrNotImplemented,
+		"payment intent confirmation is not implemented",
 	)
 }

@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentIntentUseCase) {
+func registerV1Routes(router *gin.Engine,
+	createUseCase application.CreatePaymentIntentUseCase,
+	getUseCase application.GetPaymentIntentUseCase) {
 	v1 := router.Group("/v1")
 
 	v1.Use(requestTimeOut(publicRequestTimeOut))
@@ -18,6 +20,7 @@ func registerV1Routes(router *gin.Engine, useCase application.CreatePaymentInten
 	rateLimiter := middlewares.NewRateLimiter()
 	v1.Use(rateLimiter.Middleware())
 
-	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(useCase))
-	v1.GET("/payment-intents/:id", getPaymentIntentHandler)
+	v1.POST("/payment-intents", requireIdempotencyKey, createPaymentIntentHandler(createUseCase))
+	v1.GET("/payment-intents/:id", getPaymentIntentHandler(getUseCase))
+	v1.POST("/payment-intents/:id/confirm", requireIdempotencyKey, confirmPaymentIntentHandler)
 }
