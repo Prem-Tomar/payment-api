@@ -1,4 +1,4 @@
-# G65: Build a working PostgreSQL store
+# SEQ-01 | G65: Build a working PostgreSQL store
 
 ## Goal
 
@@ -19,9 +19,11 @@ flowchart LR
 
 Read left to right: Go configuration -> Managed SQL pool -> PostgreSQL table -> Scoped Save and Get.
 
-## Start And Dependencies
+## Prerequisites
 
-Start connection/schema work now using the existing store interface and merchant-scoped lookup. You do not need to finish every queued HTTP task first. Finish the shared duplicate-record contract in the identity-safety assignment before claiming full adapter substitution.
+The existing service/store foundations are enough. No unfinished assignment is required.
+
+Start now using the existing store interface and merchant-scoped lookup. This task exercises the SQL adapter directly. Align memory-store duplicate behavior in the identity assignment before switching live runtime storage in G66.
 
 ## Implementation Parts
 
@@ -38,6 +40,15 @@ Start connection/schema work now using the existing store interface and merchant
 - The database handle has a clear close owner. No HTTP route is switched to SQL in this task.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
 
+## Scope
+
+Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
+
 ## What, Why, And Where
 
 - What: Deliver one usable SQL-backed store behind the existing application interface.
@@ -50,7 +61,7 @@ Words used here: SQL: a language for reading and changing tables. Migration: a s
 
 ## Software And Design Principle
 
-Dependency Inversion and Liskov Substitution: the SQL store must keep the existing store contract. GRASP Creator asks which component has the information to construct and own the store.
+Dependency Inversion keeps SQL behind the store interface. Compare behavior as well as Go method signatures. Full runtime substitution also needs the identity assignment's duplicate-record contract. GRASP Creator asks who has the information to construct and own the store.
 
 Use a pattern only when it solves a visible problem. A Go function or small interface may be enough. [Short principle guide](../../software-design-principles.md).
 
@@ -91,13 +102,9 @@ Read left to right: Same interface -> Memory behavior -> SQL behavior -> Same pr
 
 The memory store and SQL store both implement one Go interface. Is successful compilation enough to prove they are interchangeable? Use missing records and duplicate records as examples.
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -112,57 +119,13 @@ Read left to right: Save row -> Restart API -> Read record.
 
 Your API process restarts. Compare a map record and a SQL row. Which behavior must a client be told to expect?
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Merchant A pi-1"]
-  N1["Stored identity"]
-  N2["Merchant B pi-1"]
-  N0 --> N1
-  N1 --> N2
-```
-
-Read left to right: Merchant A pi-1 -> Stored identity -> Merchant B pi-1.
-
-Two merchants both use record ID pi-1. Choose the identity rule and explain how a lookup stays inside one merchant's scope.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Many requests"]
-  N1["Shared handles"]
-  N2["Connection budget"]
-  N3["Database"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Many requests -> Shared handles -> Connection budget -> Database.
-
-Later, many API instances open database connections at once. Explain why one sql.DB per request would be a poor ownership model and what capacity you would measure first.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `database/sql managing connections`, `pgx stdlib`, `PostgreSQL composite primary key`, and `QueryRowContext sql.ErrNoRows`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

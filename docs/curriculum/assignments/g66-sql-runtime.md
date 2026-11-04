@@ -1,4 +1,4 @@
-# G66: Integrate the SQL store with service lifecycle and errors
+# SEQ-06 | G66: Integrate the SQL store with service lifecycle and errors
 
 ## Goal
 
@@ -19,7 +19,13 @@ flowchart LR
 
 Read left to right: Runtime config -> Store constructor -> Application use case -> HTTP response.
 
-## Start And Dependencies
+## Prerequisites
+
+- SEQ-01: [issue #78](https://github.com/Prem-Tomar/payment-api/issues/78).
+- SEQ-02: [issue #59](https://github.com/Prem-Tomar/payment-api/issues/59).
+- SEQ-03: [issue #65](https://github.com/Prem-Tomar/payment-api/issues/65).
+- SEQ-04: [issue #60](https://github.com/Prem-Tomar/payment-api/issues/60).
+- SEQ-05: [issue #51](https://github.com/Prem-Tomar/payment-api/issues/51).
 
 Start after G65. Fix the request-lifetime assignment's malformed deadline response before enabling real query calls in HTTP.
 
@@ -37,6 +43,15 @@ Start after G65. Fix the request-lifetime assignment's malformed deadline respon
 - Each failure produces one coherent HTTP response.
 - SQL mode stops accepting work cleanly during shutdown.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -89,13 +104,9 @@ Read left to right: Existing interface -> New adapter -> Unchanged caller.
 
 The current readiness checker is injectable and the query service already accepts an interface. How do these earlier choices help replace a map without changing the HTTP contract?
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -110,59 +121,13 @@ Read left to right: Database down -> Health question -> Readiness question.
 
 The database is down. Decide what health and readiness should each report, and why they answer different questions.
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Client leaves"]
-  N1["Request context"]
-  N2["Pool wait"]
-  N3["Cleanup"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Client leaves -> Request context -> Pool wait -> Cleanup.
-
-A client disconnects while waiting for a connection. Trace the context through handler, use case, and SQL adapter. Which component owns cleanup?
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Stop new requests"]
-  N1["In-flight work"]
-  N2["Time budget"]
-  N3["Close pool"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Stop new requests -> In-flight work -> Time budget -> Close pool.
-
-Later, shutdown begins while requests are using the shared pool. Order stopping new work, waiting, canceling, and closing resources. State the limits of your promise.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `Go sql.DB lifecycle`, `PingContext readiness`, `dependency injection composition root`, and `errors.Is database error mapping`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

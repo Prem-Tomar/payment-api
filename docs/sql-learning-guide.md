@@ -156,5 +156,7 @@ The following are planned larger assignments, not extra requirements of the four
 | G73 | Backward-compatible schema changes, separate migration/runtime roles, safe secrets. | Configuration, migrations, least responsibility. |
 | G74 | Local backup/restore, reconnect behavior, query-plan regression analysis, capacity limits. | Persistence, operational readiness, measured performance. |
 
-Advance by demonstrated comfort. Keep Small interview questions active until the learner is ready.
-Do not require a Strong answer to complete an otherwise correct implementation.
+Publish one small interview problem initially and deepen the next problem gradually.
+Carry prior understanding forward. Learning answers may use any programming language or a
+sketch, but SQL-specific behavior must still be explained correctly. Keep mentoring rules out
+of learner task bodies and keep learning follow-ups non-blocking.

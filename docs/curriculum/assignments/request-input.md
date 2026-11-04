@@ -1,8 +1,12 @@
-# G54/G56/G62: Complete the request-input path
+# SEQ-07 | G54/G56/G62: Complete the request-input path
 
 ## Goal
 
 Make accepted HTTP input reach the application without lost fields or changed numbers.
+
+## Prerequisites
+
+- SEQ-02: [issue #59](https://github.com/Prem-Tomar/payment-api/issues/59).
 
 ## Picture First
 
@@ -21,7 +25,7 @@ Read left to right: JSON body -> Parse one object -> Clean input -> Application 
 
 ## Combined Inventory
 
-This is one delivery assignment, not several separate PR tasks. Original goals are grouped below. A closed source issue means superseded, not achieved. Complete and review each listed goal before claiming it is done.
+Complete the related parts below together. Source requests and saved originals are linked for reference.
 
 - [Original #64](https://github.com/Prem-Tomar/payment-api/issues/64): Day G54: Reject trailing JSON in create payment intent requests. [Saved original](../legacy/issue-64.md).
 - [Original #66](https://github.com/Prem-Tomar/payment-api/issues/66): Day G56: Preserve currency and payment method in application input. [Saved original](../legacy/issue-66.md).
@@ -39,6 +43,15 @@ This is one delivery assignment, not several separate PR tasks. Original goals a
 - Accepted amount, currency, method, and references reach the use case unchanged except intentional cleanup.
 - Existing body-size and error-code rules still apply.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -93,13 +106,9 @@ Read left to right: Small body -> First object valid -> Second object -> Accept 
 
 A body is under the size limit. It has one valid object and then a second object. Does the size check prove the whole body is valid? Explain the separate jobs of size checking and parsing.
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -114,59 +123,13 @@ Read left to right: Positive input -> Type conversion -> Use-case input.
 
 A handler accepts a positive int64 amount, then converts it to a smaller integer type. Point to the place where information can change. What must the application input promise?
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Route A"]
-  N1["Cleanup rule"]
-  N2["Use case"]
-  N3["Route B"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Route A -> Cleanup rule -> Use case -> Route B.
-
-Two routes clean the same input in different ways. Design one clear owner for cleanup without making the application depend on Gin.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Old client"]
-  N1["Versioned API"]
-  N2["Input mapping"]
-  N3["New client"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Old client -> Versioned API -> Input mapping -> New client.
-
-Later, an old client and a new client send different field sets. Plan a compatible input contract. Explain what you would reject and what you would preserve.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `Go json Decoder trailing data`, `Go int int64 conversion`, and `DTO application input mapping`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

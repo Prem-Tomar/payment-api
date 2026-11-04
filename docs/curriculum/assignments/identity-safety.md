@@ -1,8 +1,12 @@
-# G53/G55/G59/G60: Protect identity and merchant-scoped records
+# SEQ-03 | G53/G55/G59/G60: Protect identity and merchant-scoped records
 
 ## Goal
 
 Make record identity and caller scope safe across create and lookup boundaries.
+
+## Prerequisites
+
+The existing service/store foundations are enough. No unfinished assignment is required.
 
 ## Picture First
 
@@ -21,7 +25,7 @@ Read left to right: Caller and key -> Scoped identity -> Store decision -> Recor
 
 ## Combined Inventory
 
-This is one delivery assignment, not several separate PR tasks. Original goals are grouped below. A closed source issue means superseded, not achieved. Complete and review each listed goal before claiming it is done.
+Complete the related parts below together. Source requests and saved originals are linked for reference.
 
 - [Original #61](https://github.com/Prem-Tomar/payment-api/issues/61): Day G53: Add fake payment intent ID sequence boundary. [Saved original](../legacy/issue-61.md).
 - [Original #65](https://github.com/Prem-Tomar/payment-api/issues/65): Day G55: Reject duplicate payment intent IDs in the memory store. [Saved original](../legacy/issue-65.md).
@@ -42,6 +46,15 @@ This is one delivery assignment, not several separate PR tasks. Original goals a
 - Independent merchants can use the same retry key safely in the boundary shape.
 - The duplicate check and insert form one protected decision.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -94,13 +107,9 @@ Read left to right: Caller A checks -> Caller B checks -> Both insert?.
 
 Two callers check that an ID is absent before either takes the insertion lock. Can both still think creation is safe? Separate data-race safety from protecting one create decision.
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -115,59 +124,13 @@ Read left to right: Merchant A and key -> Identity boundary -> Merchant B and ke
 
 Two merchants use the same retry key. Draw the values that identify their requests. Which values belong to caller scope?
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Request A"]
-  N1["Shared store decision"]
-  N2["Original row"]
-  N3["Request B"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Request A -> Shared store decision -> Original row -> Request B.
-
-Two requests create the same ID at once. Decide where the duplicate check and write must live together, while keeping old data intact.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["API A"]
-  N1["Shared database later"]
-  N2["One retry identity"]
-  N3["API B"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: API A -> Shared database later -> One retry identity -> API B.
-
-Later, two API servers handle the same retry during a network failure. Explain what a process lock can guarantee and what shared database rules would need to guarantee.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `Go map check insert mutex`, `tenant scoped idempotency`, and `Go ID generator dependency`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

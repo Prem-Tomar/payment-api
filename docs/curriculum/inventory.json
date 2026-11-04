@@ -3,12 +3,16 @@
   "updated": "2026-11-05",
   "policy": {
     "delivery": "2-4 connected implementation goals",
-    "interviewActiveLevel": "Small",
-    "promotion": "Learner explains the simpler case and an edge case with little help and feels comfortable",
-    "language": "Plain English; technical depth retained",
+    "promotion": "Carry demonstrated understanding forward; no explicit comfort declaration",
+    "language": "Plain English; learning answers in any programming language, pseudocode, or diagrams; original Go/SQL semantics must remain correct",
     "feedback": "Visual-first; one focused action",
     "sourceClosureReason": "Superseded, not achieved",
-    "databaseStart": "G65 can begin now with the existing storage boundary"
+    "databaseStart": "G65 can begin now with the existing storage boundary",
+    "interviewMode": "One small interview problem initially; deepen future problems using prior answers",
+    "nextTask": {
+      "sequence": "SEQ-01",
+      "issue": 78
+    }
   },
   "assignments": [
     {
@@ -20,7 +24,10 @@
         75
       ],
       "guide": "docs/curriculum/assignments/request-input.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-07",
+      "prerequisiteIssues": [
+        59
+      ]
     },
     {
       "key": "public-errors",
@@ -32,7 +39,10 @@
         76
       ],
       "guide": "docs/curriculum/assignments/public-errors.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-08",
+      "prerequisiteIssues": [
+        59
+      ]
     },
     {
       "key": "honest-output",
@@ -44,7 +54,10 @@
         62
       ],
       "guide": "docs/curriculum/assignments/honest-output.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-04",
+      "prerequisiteIssues": [
+        59
+      ]
     },
     {
       "key": "application-lifetime",
@@ -56,7 +69,8 @@
         59
       ],
       "guide": "docs/curriculum/assignments/application-lifetime.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-02",
+      "prerequisiteIssues": []
     },
     {
       "key": "identity-safety",
@@ -68,7 +82,8 @@
         73
       ],
       "guide": "docs/curriculum/assignments/identity-safety.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-03",
+      "prerequisiteIssues": []
     },
     {
       "key": "runtime-guards",
@@ -78,7 +93,8 @@
         77
       ],
       "guide": "docs/curriculum/assignments/runtime-guards.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-05",
+      "prerequisiteIssues": []
     }
   ],
   "database": [
@@ -86,25 +102,41 @@
       "day": "G65",
       "issue": 78,
       "guide": "docs/curriculum/assignments/g65-postgres-store.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-01",
+      "prerequisiteIssues": []
     },
     {
       "day": "G66",
       "issue": 79,
       "guide": "docs/curriculum/assignments/g66-sql-runtime.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-06",
+      "prerequisiteIssues": [
+        78,
+        59,
+        65,
+        60,
+        51
+      ]
     },
     {
       "day": "G67",
       "issue": 80,
       "guide": "docs/curriculum/assignments/g67-atomic-retries.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-09",
+      "prerequisiteIssues": [
+        79,
+        64,
+        70
+      ]
     },
     {
       "day": "G68",
       "issue": 81,
       "guide": "docs/curriculum/assignments/g68-sql-query-depth.md",
-      "activeLevel": "Small"
+      "sequence": "SEQ-10",
+      "prerequisiteIssues": [
+        80
+      ]
     }
   ]
 }

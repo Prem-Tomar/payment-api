@@ -86,7 +86,7 @@ Go accepts and translates requests. Domain code owns financial truth. Later SQL 
 operational metadata; it does not make the database the financial-rule owner.
 Single Responsibility means keeping these different reasons to change separate.
 
-### Question Of The Day And Small Practice
+### Question Of The Day
 
 ```mermaid
 flowchart LR
@@ -96,8 +96,7 @@ flowchart LR
 Why can a request be valid JSON but still be rejected by the domain? Name the component that
 should decide each case. Answer in short sentences or a sketch; English grammar is not scored.
 
-<details>
-<summary>Moderate preview - not active</summary>
+### Interview Problem
 
 ```mermaid
 flowchart LR
@@ -105,21 +104,6 @@ flowchart LR
 ```
 
 How could both callers reuse one use case without requiring the local caller to know Gin?
-
-</details>
-
-<details>
-<summary>Strong preview - not active</summary>
-
-```mermaid
-flowchart LR
-  A["API server"] --> B["Stored metadata"] --> C["Domain truth"] --> D["Retry after failure"]
-```
-
-Later, a reply is lost. Which component knows whether work happened? Introduce that failure
-scenario only after the learner understands the simpler ownership boundaries.
-
-</details>
 
 Follow [the learning guide](../learning-and-interview-guide.md) for visual-first feedback and
 [the inventory](../curriculum/index.md) for active implementation assignments.

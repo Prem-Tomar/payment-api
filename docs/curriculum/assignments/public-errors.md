@@ -1,8 +1,12 @@
-# G57/G58/G61/G63: Deliver consistent public errors
+# SEQ-08 | G57/G58/G61/G63: Deliver consistent public errors
 
 ## Goal
 
 Give clients one clear error shape across middleware and handlers.
+
+## Prerequisites
+
+- SEQ-02: [issue #59](https://github.com/Prem-Tomar/payment-api/issues/59).
 
 ## Picture First
 
@@ -21,7 +25,7 @@ Read left to right: Request -> Guard or handler -> Error mapping -> Code field r
 
 ## Combined Inventory
 
-This is one delivery assignment, not several separate PR tasks. Original goals are grouped below. A closed source issue means superseded, not achieved. Complete and review each listed goal before claiming it is done.
+Complete the related parts below together. Source requests and saved originals are linked for reference.
 
 - [Original #70](https://github.com/Prem-Tomar/payment-api/issues/70): Day G57: Add consistent middleware error codes. [Saved original](../legacy/issue-70.md).
 - [Original #71](https://github.com/Prem-Tomar/payment-api/issues/71): Day G58: Bound payment intent path identifier length. [Saved original](../legacy/issue-71.md).
@@ -41,6 +45,15 @@ This is one delivery assignment, not several separate PR tasks. Original goals a
 - Internal secrets and Go field names do not leak.
 - Valid requests and operational routes keep their behavior.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -93,13 +106,9 @@ Read left to right: Middleware error -> Client error reader -> Handler error.
 
 A middleware failure has only a message. A handler failure has a code. What extra work does this give a client? Which earlier helper can give both paths one contract?
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -114,59 +123,13 @@ Read left to right: Client report -> Request ID -> Matching log.
 
 A client reports an error message used by many requests. Show how one request ID helps you find the right log without exposing secrets.
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Database error"]
-  N1["Adapter"]
-  N2["Application error"]
-  N3["HTTP response"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Database error -> Adapter -> Application error -> HTTP response.
-
-A database later reports a duplicate key. Decide which layer understands that failure and which layer chooses the HTTP response.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Old client"]
-  N1["Stable code"]
-  N2["Extra field details"]
-  N3["New client"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Old client -> Stable code -> Extra field details -> New client.
-
-Two client versions depend on error codes. Plan a change that adds useful field details without breaking existing clients.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `Go shared error response import cycle`, `Gin validator JSON field name`, and `request correlation ID`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

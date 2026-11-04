@@ -70,8 +70,9 @@ Learning follow-ups are non-blocking; implementation defects remain review findi
 See [AGENTS.md](AGENTS.md) for the full coaching and review rules.
 
 The [learning inventory](docs/curriculum/index.md) groups related goals into larger assignments.
-Technical coaching is visual-first and uses plain English. Small interview exercises are active;
-Moderate and Strong exercises are previews until the learner is comfortable. Read the
+Technical coaching is visual-first and uses plain English. Use SEQ identifiers to choose work.
+Interview follow-ups build on demonstrated understanding. Learning answers may use any
+programming language, pseudocode, or diagrams. Read the
 [coaching guide](docs/learning-and-interview-guide.md),
 [software-design principle guide](docs/software-design-principles.md), and
 [SQL learning guide](docs/sql-learning-guide.md).

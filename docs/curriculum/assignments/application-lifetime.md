@@ -1,8 +1,12 @@
-# G44/G48/G49/G50: Carry input and request lifetime through the use case
+# SEQ-02 | G44/G48/G49/G50: Carry input and request lifetime through the use case
 
 ## Goal
 
 Make application calls explicit and make each request produce one final outcome.
+
+## Prerequisites
+
+The existing service/store foundations are enough. No unfinished assignment is required.
 
 ## Picture First
 
@@ -21,7 +25,7 @@ Read left to right: Body and metadata -> Application input -> Context-aware use 
 
 ## Combined Inventory
 
-This is one delivery assignment, not several separate PR tasks. Original goals are grouped below. A closed source issue means superseded, not achieved. Complete and review each listed goal before claiming it is done.
+Complete the related parts below together. Source requests and saved originals are linked for reference.
 
 - [Original #55](https://github.com/Prem-Tomar/payment-api/issues/55): Day G44: Add request cancellation handling in create use case. [Saved original](../legacy/issue-55.md).
 - [Original #56](https://github.com/Prem-Tomar/payment-api/issues/56): Day G48: Add request metadata input to create use case. [Saved original](../legacy/issue-56.md).
@@ -41,6 +45,15 @@ This is one delivery assignment, not several separate PR tasks. Original goals a
 - Direct and wrapped deadline errors produce one JSON error, with no trailing object.
 - Canceled, invalid, not-implemented, and unexpected failures remain distinct.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -93,13 +106,9 @@ Read left to right: Deadline ends -> Context signal -> Function checks signal.
 
 A context reaches its deadline. Does passing it to a function automatically stop that function? Explain passing the signal versus observing it.
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -114,59 +123,13 @@ Read left to right: Deadline error -> First JSON -> Second JSON?.
 
 The handler writes a timeout error and then runs its generic error branch. Trace the two writes. Where must the response path end?
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["HTTP caller"]
-  N1["Application contract"]
-  N2["Use case"]
-  N3["Local worker"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: HTTP caller -> Application contract -> Use case -> Local worker.
-
-The same use case is called by HTTP and a local worker. Choose what input both callers need and what must remain HTTP-only.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Query"]
-  N1["Commit request"]
-  N2["Connection lost"]
-  N3["Outcome unknown"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Query -> Commit request -> Connection lost -> Outcome unknown.
-
-Later, a query succeeds but the commit response is lost. Explain why timeout, failure, and unknown outcome are different before choosing a retry policy.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `Go errors.Is context deadline`, `Gin response written return`, and `application service input struct`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 

@@ -94,7 +94,7 @@ Middleware does work shared by routes. A handler owns its route's response. Cons
 creates shared dependencies. This connects Single Responsibility and Creator responsibility to
 the server code already learned. Creator asks who has the information to create a dependency.
 
-### Question Of The Day And Small Practice
+### Question Of The Day
 
 ```mermaid
 flowchart LR
@@ -104,8 +104,7 @@ flowchart LR
 Why should an invalid timeout or port fail during startup? How does that protect later requests?
 Use the existing configuration and lifecycle code in your explanation.
 
-<details>
-<summary>Moderate preview - not active</summary>
+### Interview Problem
 
 ```mermaid
 flowchart LR
@@ -114,20 +113,5 @@ flowchart LR
 
 Why do public traffic, health, and readiness need different boundaries?
 
-</details>
-
-<details>
-<summary>Strong preview - not active</summary>
-
-```mermaid
-flowchart LR
-  A["Shutdown starts"] --> B["In-flight requests"] --> C["Time budget"] --> D["Close future SQL pool"]
-```
-
-Later, the server owns a shared SQL pool. Explain resource ownership during shutdown after
-the learner is comfortable with the earlier request and server lifetime concepts.
-
-</details>
-
-Small is active; later levels depend on comfort, not a day number. The actual database track
-starts at G65 in [the inventory](../curriculum/index.md). No database code is added to G2-G9.
+The actual database track starts at G65 in [the inventory](../curriculum/index.md).
+No database code is added to G2-G9. Conceptual answers may use any programming language or sketch.

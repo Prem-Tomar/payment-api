@@ -14,10 +14,20 @@
 - Use short sentences and common English. Define technical terms beside their first use.
   Keep exact code names visible. Accept short answers, bullets, and sketches; assess
   understanding rather than English fluency. Do not reduce technical depth for language.
-- Every assignment includes Small, Moderate, and Strong interview problem statements,
-  each with a visual. Start with Small active. Moderate/Strong are labelled previews and
-  stay inactive until the learner explains the simpler case and an edge case with little
-  help and is comfortable. Do not advance based only on time, task number, or code volume.
+- Every assignment has ONE interview problem, with its own visual, distinct from QOD.
+  Start the interview sequence with a small problem. Increase intensity in later tasks
+  or follow-ups by extending an earlier topic or introducing a new one. Do not publish
+  Small/Moderate/Strong alternatives together. Carry demonstrated understanding forward.
+  Do not require an explicit comfort declaration before a follow-up.
+- Keep mentor policies, grading rubrics, and progression gates out of learner task bodies.
+  Put implementation scope first and learning discussion in a separate labelled section.
+  QOD must recall earlier work and must not repeat the current interview question.
+- Accept learning answers in any programming language, pseudocode, or diagrams.
+  For Go- or SQL-specific questions, require the original semantics to be explained
+  correctly; examples in Java or another language must identify relevant differences.
+  This flexibility does not change the assigned Go/SQL implementation language.
+- Use the SEQ identifier in the issue title and inventory for delivery order. G numbers
+  are topic references, not the current pick order. List real prerequisites explicitly.
 - Connect implementation to software design principles using concrete responsibility
   decisions. Cover SOLID, GRASP Creator, creational patterns, and behavioral patterns
   gradually. Define each name and distinguish Creator responsibility from a factory
@@ -30,7 +40,7 @@
 - Every new or successor learning issue MUST include a concrete Question of the Day.
   Use `.github/ISSUE_TEMPLATE/learning-task.md`. Replace all placeholders before publishing.
   After creating or editing an issue, read its saved body back and verify the question,
-  three interview levels, active-level label, visuals, and scope are present.
+  one interview problem, relevant visuals, and clear implementation scope are present.
 - A Question of the Day revisits previously implemented concepts. Ask for reasoning about
   a short scenario, behavior, failure, or tradeoff; do not include the answer or a full solution.
 - Explain what the concept is, why it matters to system design, where it fits, how it builds

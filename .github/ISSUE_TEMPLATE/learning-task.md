@@ -1,7 +1,7 @@
 ---
 name: Implementation learning task
 about: A bounded implementation with coaching and a Question of the Day
-title: "Day GXX: "
+title: "SEQ-XX | GXX: "
 assignees: vishaltomar004
 ---
 
@@ -52,6 +52,9 @@ it must not add database code to an existing Go task. G65 onward may explicitly 
 
 List exclusions. Tests and documentation are reviewer-owned, not learner requirements.
 
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
+
 ## Research Hints
 
 Provide a few search phrases and reasoning prompts, not a complete walkthrough.
@@ -63,37 +66,18 @@ Previously learned concepts: name earlier implementations this question revisits
 Scenario: provide a concrete example or failure situation. Replace this placeholder.
 Place a relevant diagram or execution trace before the question.
 
-1. Ask the learner to predict and explain behavior using prior concepts.
-2. Ask about the system-design consequence, responsibility, or tradeoff.
+1. Ask the learner to predict and explain behavior using earlier completed work.
+2. Ask a related consequence question. Do not repeat the current interview scenario.
 
-Answer every part in your own words in the relevant PR description or comment.
-An issue-only answer does not satisfy this placement rule. No extra code, tests, or
-documentation are required to answer. The reviewer preserves the answer, explains
-corrections, and asks a targeted follow-up if needed. Learning answers are expected
-but do not block merging an otherwise correct implementation.
+Answer in your own words. Any programming language, pseudocode, or sketch is welcome.
+Explain original Go/SQL behavior accurately when the question is language-specific.
 
-## Interview Practice
+## Interview Problem
 
-Active level: Small. Use short sentences and explain unfamiliar words. A learner may
-answer with bullets or a sketch. Judge reasoning, not English grammar.
+Provide ONE scenario and its diagram. Begin with a small problem.
+Choose a deeper follow-up in a later task based on prior answers.
+Do not include a menu of difficulty levels or repeat the QOD scenario.
 
-### Small - active
-
-Provide one small system-design scenario, its diagram, and a focused reasoning question.
-
-<details>
-<summary>Moderate - later practice, not active</summary>
-
-Provide a larger scenario and its own picture. Explain new terms before assigning it.
+[Answer and coaching guidance](../../docs/learning-and-interview-guide.md).
 
 </details>
-
-<details>
-<summary>Strong - future practice, not active</summary>
-
-Provide a deeper scenario and its own picture. This is a preview, not extra implementation.
-
-</details>
-
-Advance only when the learner explains the simpler case and an edge case with little help
-and says they are comfortable. Do not advance just because a task number is higher.

@@ -40,23 +40,20 @@ Use short sentences and familiar English. Define a new term beside its first use
 Keep code names exact. Say "a group of writes that commit together" before using "transaction".
 Accept short answers, bullets, code traces, or sketches. Do not grade English grammar.
 
-## Interview Difficulty
+## Mentor Guidance: Interview Progression
 
 ```mermaid
 flowchart LR
-  A["Small: one path"] --> B["Comfort and clear reasoning"] --> C["Moderate: one failure"] --> D["Strong: competing constraints"]
+  A["One small problem"] --> B["Learner explains"] --> C["Later: add one constraint"] --> D["Later: deepen or change topic"]
 ```
 
-| Level | Active expectation | Move up when |
-| --- | --- | --- |
-| Small | Trace one request, state one promise, explain one edge case. | The learner explains it with little help and feels ready. |
-| Moderate | Compare two choices and explain a failure path. | The learner can justify a choice and handle a changed example. |
-| Strong | Reason about concurrent work, partial failure, capacity, and tradeoffs. | The mentor introduces missing concepts first; the learner is comfortable. |
-
-Start every learner at Small for new interview topics. Larger coding assignments do not force
-harder interview questions. Time spent and task numbers are not proof of mastery.
-Each task includes all three statements, but later levels are folded away as previews.
-Only the active level is assigned. Do not ask for three complete system designs at once.
+Publish one interview problem per task. Start the sequence with a small scenario.
+In later tasks or follow-ups, add a failure, a tradeoff, or another constraint.
+The next problem may extend an earlier topic or introduce a new one.
+Carry demonstrated understanding forward instead of resetting familiar topics to Small.
+There is no explicit comfort-declaration gate. Adjust help when an answer reveals a gap.
+Do not publish three difficulty alternatives together. Keep these mentor policies out of task bodies.
+Larger implementation assignments still need connected, demanding project work.
 
 ## Question Of The Day
 
@@ -66,10 +63,17 @@ flowchart LR
 ```
 
 A QOD revisits learned concepts. Do not quiz unintroduced future topics.
+It must not repeat the interview problem. The interview problem applies ideas to a fresh
+scenario; QOD recalls earlier work. The two can connect without asking the same thing twice.
 Use a picture and ask for a prediction, mechanism, consequence, or changed condition.
 The learner answers every part in their own words in the PR discussion.
 Keep the original answer. Mark it Correct, Partially correct, Needs correction, or Awaiting answer.
 Explain one misunderstanding at a time. Ask a small follow-up instead of pasting a full solution.
+
+Accept learning answers in Java, Python, JavaScript, Go, another programming language,
+pseudocode, or diagrams. Judge the concept, not the chosen syntax. If a question is about
+Go or SQL semantics, the answer must still explain that original behavior correctly and
+identify differences when using another language. Implementation languages remain as scoped.
 
 Learning answers are expected but non-blocking. A missing answer does not block an otherwise
 correct implementation. Actual code defects remain implementation findings.
@@ -90,8 +94,9 @@ Explain what, why, and where. Use a principle to discuss a real design choice, n
 
 - Confirm it has 2-4 connected parts and observable integrated behavior.
 - Include a real QOD, not a placeholder.
-- Include Small, Moderate, and Strong scenarios with separate pictures.
-- Keep Small active until readiness is demonstrated.
+- Include one interview problem with its own picture; do not duplicate QOD.
+- Keep mentor progression rules and grading rubrics out of the task body.
+- Accept any programming language or sketch for conceptual answers.
 - Define new words and show earlier/future connections.
 - Preserve routine-test/documentation ownership and non-blocking learning feedback.
 - Read the saved GitHub body back and verify these sections are actually present.

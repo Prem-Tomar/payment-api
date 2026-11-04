@@ -1,4 +1,4 @@
-# G68: Build and explain useful SQL queries
+# SEQ-10 | G68: Build and explain useful SQL queries
 
 ## Goal
 
@@ -19,7 +19,9 @@ flowchart LR
 
 Read left to right: Scoped read request -> SQL rows and joins -> Bounded result -> Measured query plan.
 
-## Start And Dependencies
+## Prerequisites
+
+- SEQ-09: [issue #80](https://github.com/Prem-Tomar/payment-api/issues/80).
 
 Start after G67. Use only synthetic/local learning records. A query plan is database work to inspect, not a number to guess.
 
@@ -37,6 +39,15 @@ Start after G67. Use only synthetic/local learning records. A query plan is data
 - Summary counts match the raw learning rows.
 - The chosen index is justified by actual plans. A sequential scan on a small table is not automatically a defect.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
+
+## Scope
+
+Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
+
+Routine tests and documentation are reviewer-owned.
+
+<details>
+<summary>Learning discussion - not extra implementation requirements</summary>
 
 ## What, Why, And Where
 
@@ -89,13 +100,9 @@ Read left to right: Scoped record ID -> Different merchant -> No public record.
 
 A scoped lookup finds no row for merchant A, while merchant B has the same local ID. Why must the earlier lookup contract not fall back to a global search? Explain the difference between a missing scoped record and missing merchant identity.
 
-Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
+Use your own words. Any programming language, pseudocode, or a sketch is welcome. If the question concerns Go or SQL semantics, explain that original behavior correctly.
 
-## Interview Practice
-
-**Active level: Small.** Start here. The mentor activates a harder level only after the learner can explain the simple case and an edge case, use a familiar example without step-by-step help, and says they are comfortable. Task number and time spent do not automatically raise the interview level.
-
-### Small - active
+## Interview Problem
 
 ```mermaid
 flowchart LR
@@ -110,57 +117,13 @@ Read left to right: Stored rows -> LIMIT ten -> Stable page?.
 
 A query returns ten rows without ORDER BY. Can a client rely on the same ten next time? State the promise you would need before calling it a page.
 
-<details>
-<summary>Moderate - later practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Learning rows"]
-  N1["Two join choices"]
-  N2["Rows and counts"]
-  N0 --> N1
-  N1 --> N2
-```
-
-Read left to right: Learning rows -> Two join choices -> Rows and counts.
-
-One learning record has two retry rows and another has none. Predict how INNER JOIN and LEFT JOIN affect the rows and counts.
-
-New concepts in this preview must be explained before this level is assigned.
-
-</details>
-
-<details>
-<summary>Strong - future practice, not active yet</summary>
-
-```mermaid
-flowchart LR
-  N0["Concurrent inserts"]
-  N1["Page boundary"]
-  N2["Index choice"]
-  N3["Measured plan"]
-  N0 --> N1
-  N1 --> N2
-  N2 --> N3
-```
-
-Read left to right: Concurrent inserts -> Page boundary -> Index choice -> Measured plan.
-
-Later, data grows and inserts happen between page requests. Compare offset paging and a stable cursor, then describe how EXPLAIN evidence would guide an index choice.
-
-The mentor introduces any new concepts first. This is a preview, not a requirement to implement another system now.
-
-</details>
-
 ## Research Hints
 
 Search `PostgreSQL joins NULL count`, `WHERE GROUP BY HAVING`, `stable keyset pagination`, and `PostgreSQL EXPLAIN ANALYZE`.
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-## Scope And Coaching Agreement
+For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
 
-Use local learning data only. PostgreSQL stores operational/request metadata. Keep financial calculations, ledger rules, processor calls, and real payment lifecycle decisions outside this assignment.
-
-Reviewers own routine tests and documentation. Implementation review checks the listed behavior. Questions and interview answers belong in the related PR description or comment, in the learner's own words. Preserve original answers and add focused corrections. Missing, partial, or incorrect learning answers are non-blocking for an otherwise correct implementation. No extra code, tests, or documentation are needed to answer.
+</details>
 
