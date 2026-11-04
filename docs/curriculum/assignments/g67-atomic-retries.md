@@ -4,6 +4,60 @@
 
 Keep a learning record and its retry identity consistent during success, failure, and a retry.
 
+## Learn Before Building
+
+### 1. Related writes need one transaction
+
+A transaction is a group of database operations that finish as one accepted change or are abandoned together. Atomicity is that all-or-nothing property. Commit asks the database to accept the transaction; rollback abandons its uncommitted changes. Go's sql.Tx is the handle for operations inside one transaction.
+
+```mermaid
+flowchart LR
+  B["Begin transaction"] --> W["Related writes through sql.Tx"] --> D["Decision"]
+  D --> C["Commit: accept together"]
+  D --> R["Rollback: abandon together"]
+```
+
+**Worked example:** A catalogue import adds an item row and its import-history row. If history insertion fails before commit, the item must not remain as an accepted half-import. Every operation intended to be in the transaction uses its transaction handle. Calling sql.DB separately can use another connection outside that transaction.
+
+**Common mistake:** Assuming two individual SQL successes form one atomic workflow. A transaction also does not automatically prevent every possible interaction with other concurrent transactions.
+
+**Why and where:** This extends earlier duplicate protection into shared storage. Transaction coordination belongs at the application/storage boundary, not inside JSON parsing. See [Go transactions](https://go.dev/doc/database/execute-transactions).
+
+### 2. Retry identity and request meaning
+
+Idempotency means a repeated logical request does not accidentally create another effect. A retry identity combines merchant, operation, and retry key. A request fingerprint represents the meaningful accepted input so a repeated key can be checked against its original request. A hash is a compact digest of data; it is not encryption, and it does not decide which fields are meaningful.
+
+```mermaid
+flowchart LR
+  I["Merchant + operation + retry key"] --> K["Find recorded request identity"]
+  P["Accepted input"] --> F["Comparable fingerprint"] --> K
+  K --> O["Matching result or changed-input conflict"]
+```
+
+**Worked example:** A catalogue import retry with the same identity and the same accepted content refers to the original import. Changing the content while reusing that identity is a different request, not permission to return the old result. Representing input consistently matters: harmless JSON field order should not become an accidental new business meaning.
+
+**Common mistake:** Using the key globally mixes merchants. Hashing raw request bytes without considering accepted meaning can make equivalent input look different. A stored digest must not be presented as protected secret data.
+
+**Why and where:** This builds on the earlier merchant-scoped retry record shape. Information Expert puts the decision near the stored identity and result. Keep the concrete transaction small instead of building a general Unit of Work framework, which would be an abstraction for coordinating many kinds of changes.
+
+### 3. Competing callers and uncertain outcomes
+
+A unique constraint is a database-enforced rule allowing only one stored row for a chosen identity. A uniqueness race occurs when callers attempt that identity concurrently. SQLSTATE is a structured database error category; inspect documented driver/database identity rather than error-message text. An uncertain outcome means the caller cannot confirm whether the database accepted work.
+
+```mermaid
+flowchart LR
+  A["Caller A: same identity"] --> U["Database unique rule"]
+  B["Caller B: same identity"] --> U
+  U --> S["Stored completed result"] --> R["Retry can inspect recorded outcome"]
+```
+
+**Worked trace:** An import commits, but the connection fails before the caller receives confirmation. The missing reply does not prove rollback. A later attempt needs the recorded identity and outcome, rather than a blind new write. A duplicate insertion error also does not alone prove the request content matched or that a completed result exists. After a PostgreSQL statement error, transaction state must be handled deliberately before reading again.
+
+**Common mistake:** Converting every unique violation into success, or blindly retrying every failed commit as a fresh operation.
+
+**Why and where:** This prepares for later isolation and bounded-retry lessons. Dependency Inversion keeps driver-specific classification behind storage contracts. Only synthetic learning records are involved; no real charge or ledger operation is added.
+
+
 ## Picture First
 
 ```mermaid
@@ -59,7 +113,6 @@ Routine tests and documentation are reviewer-owned.
 - Earlier learning: Builds on scoped IDs, duplicate protection, idempotency records, and request context.
 - Later use: Later concurrency lessons examine isolation, failed commit responses, and bounded retries.
 
-Words used here: Transaction: a group of database changes committed together. Commit: make those changes part of the database. Rollback: abandon the transaction's changes. Idempotency: retries must not create accidental duplicate work.
 
 ## Software And Design Principle
 
@@ -125,7 +178,7 @@ Search `Go sql.Tx Commit Rollback`, `PostgreSQL unique constraint concurrent ins
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
+Reply in your own words in the PR discussion. Any programming language, pseudocode, or diagram is welcome. [Answer guidance](../../learning-and-interview-guide.md).
 
 </details>
 

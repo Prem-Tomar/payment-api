@@ -56,3 +56,8 @@ The [SQL guide](../sql-learning-guide.md) plans later depth through G74 without 
 future issue now. Each current assignment has one interview problem and a distinct QOD.
 Mentor policies live in [the coaching guide](../learning-and-interview-guide.md), not the task body.
 
+Each active guide now teaches unfamiliar concepts before the implementation steps, using
+definitions, labelled visuals, worked examples, common failures, and practical connections.
+The [API contract roadmap](../api-contract-transfer-guide.md) maps these foundations to a
+later complete API-design assessment without adding another problem to current tasks.
+

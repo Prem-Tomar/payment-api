@@ -4,6 +4,54 @@
 
 Make SQL an explicit runtime option without mixing SQL details into handlers.
 
+## Learn Before Building
+
+### 1. Construction and runtime selection
+
+An adapter fits a tool, such as SQL storage, to an application contract. The composition root is the startup location that constructs and connects dependencies. Dependency injection means supplying those dependencies from outside a component. Runtime configuration selects how the running application is built.
+
+```mermaid
+flowchart LR
+  C["Startup configuration"] --> S["Choose memory or SQL adapter"] --> A["Supply application contract"] --> H["Handlers call application"]
+```
+
+**Worked example:** Startup reads storage mode once, constructs the selected store, and gives it to the application. A lookup handler then performs the same application call in either mode. A factory is a construction function or technique; GRASP Creator is the responsibility guideline for deciding who has the information to create the dependency.
+
+**Common mistake:** Selecting and opening a database separately inside each handler duplicates ownership and can create many pools.
+
+**Why and where:** Single Responsibility keeps construction separate from request handling. This extends G65's adapter into one complete runtime path without adding financial behavior.
+
+### 2. Shared resources need a shutdown owner
+
+G65 introduced sql.DB, the shared connection-pool handle. Lifecycle means when a resource starts, is used, and ends. Graceful shutdown stops accepting new work and gives existing work a bounded chance to finish. A context carries a deadline and cancellation signal.
+
+```mermaid
+flowchart LR
+  A["Startup owns shared handle"] --> B["Requests borrow database capacity"] --> C["Shutdown stops new work"] --> D["Wait within budget, then close owned resources"]
+```
+
+**Worked trace:** Several requests use one handle. Ending one request releases its own query resources; it must not close the shared handle used by others. When the process shuts down, the lifecycle owner coordinates server work and database closure. A SQL readiness check uses PingContext with a short budget; health remains an independent process check.
+
+**Common mistake:** Closing sql.DB after a single lookup or starting an unlimited readiness wait can make an otherwise healthy service unavailable.
+
+**Why and where:** This connects readiness injection, request budgets, and graceful shutdown to real storage. Pool capacity and public rate limits remain distinct.
+
+### 3. Translate storage outcomes without inventing success
+
+A storage contract includes behavior as well as method signatures. No row, duplicate identity, cancellation, deadline expiry, and unavailable storage are different outcomes. An error chain preserves an underlying cause through added context; errors.Is checks causes without matching prose.
+
+```mermaid
+flowchart LR
+  S["Storage result or failure"] --> A["Application meaning"] --> M["One HTTP mapping"] --> R["One response"]
+```
+
+**Worked example:** An unavailable catalogue database must not be described as an empty catalogue. Similarly, selecting SQL for lookup does not make an unsupported create operation complete. A placeholder remains a placeholder until its actual write path exists.
+
+**Common mistake:** Exposing driver text or credentials to the client, or writing a second generic JSON response after a specific error response.
+
+**Why and where:** This preserves earlier input, identity, and truthful-output work. [Go database/sql documentation](https://pkg.go.dev/database/sql) gives the exact handle methods; the assignment remains about integrating their behavior.
+
+
 ## Picture First
 
 ```mermaid
@@ -61,7 +109,6 @@ Routine tests and documentation are reviewer-owned.
 - Earlier learning: Builds on G65, config, readiness injection, typed errors, and graceful shutdown.
 - Later use: The same construction point can later add measured pool settings without changing route code.
 
-Words used here: Composition root: the place that creates and connects dependencies. Adapter: code that fits one storage tool to an application interface.
 
 ## Software And Design Principle
 
@@ -127,7 +174,7 @@ Search `Go sql.DB lifecycle`, `PingContext readiness`, `dependency injection com
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
+Reply in your own words in the PR discussion. Any programming language, pseudocode, or diagram is welcome. [Answer guidance](../../learning-and-interview-guide.md).
 
 </details>
 

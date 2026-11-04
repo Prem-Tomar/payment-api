@@ -4,6 +4,54 @@
 
 Make accepted HTTP input reach the application without lost fields or changed numbers.
 
+## Learn Before Building
+
+### 1. Body size and JSON shape are separate checks
+
+A request body is the bytes sent after HTTP headers. JSON is a format for representing structured data. A decoder reads those bytes into Go values. Parsing checks whether the input follows the format. A byte limit bounds how much input may be consumed. EOF means the reader reached the end of the input.
+
+```mermaid
+flowchart LR
+  B["Incoming body bytes"] --> L["Bound byte count"] --> D["Decode the intended value"] --> E["Check whether input is finished"]
+```
+
+**Worked example:** A catalogue endpoint expects one object. A body containing that object followed by spaces still represents one value. A decoder can finish one value before it reaches the end of the reader. Knowing that the first value decoded does not describe the remaining bytes.
+
+**Common mistake:** Assuming Content-Length, the declared body length header, always exists or is trustworthy. A reader must enforce its own consumption limit. Streaming means reading incrementally rather than requiring the whole body in memory.
+
+**Why and where:** This extends the existing body-size guard and JSON parsing. The size guard controls resource use; parsing controls accepted meaning. Keep their error outcomes distinct.
+
+### 2. Mapping must preserve accepted information
+
+A DTO is the transport data shape. Application input is the shape passed to the use case. Mapping copies accepted values between those boundaries. Integer width is how many bits a type uses; its representable range determines which amounts fit. int64 is a signed 64-bit integer. Go int can be 32 or 64 bits depending on the target architecture, so it is not an architecture-independent substitute. A narrower type can represent fewer integers.
+
+```mermaid
+flowchart LR
+  A["Accepted DTO fields"] --> B["Deliberate mapping"] --> C["Application input"] --> D["Use case receives same meaning"]
+```
+
+**Worked trace:** A toy three-digit storage field cannot represent a four-digit accepted value. The equivalent software risk appears when a wide accepted number is converted into a smaller integer type. Currency and payment method can also be lost if a mapper copies only amount.
+
+**Common mistake:** Assuming compilation proves that a numeric conversion preserves every value, or normalizing a field in the DTO but forwarding an older copy.
+
+**Why and where:** Single Responsibility means parsing, intentional cleanup, and application work have different reasons to change. Preserve accepted information through the complete path rather than adding policy to a mapper.
+
+### 3. Database preview: typed values stay data
+
+A SQL parameter is a value passed separately from a database command. A column type bounds what a database field can hold. A store adapter translates the application contract into storage operations.
+
+```mermaid
+flowchart LR
+  A["Accepted value"] --> B["Application input"] --> C["Future SQL parameter"] --> D["Compatible column"]
+```
+
+**Worked example:** A future inventory count accepted as a wide integer still needs a database column that can represent it. A safe parameter protects the SQL command's structure, but does not repair an earlier narrowing conversion.
+
+**Common mistake:** Using database validation as a reason to silently change accepted values before they reach storage.
+
+**Why and where:** This extends today's end-to-end field mapping. Database code remains outside this legacy Go assignment.
+
+
 ## Prerequisites
 
 - SEQ-02: [issue #59](https://github.com/Prem-Tomar/payment-api/issues/59).
@@ -41,12 +89,14 @@ Complete the related parts below together. Source requests and saved originals a
 
 - Bad input stops before the use case.
 - Accepted amount, currency, method, and references reach the use case unchanged except intentional cleanup.
-- Existing body-size and error-code rules still apply.
+- Existing body-size and error-code rules still apply: oversized input and field validation keep their existing categories.
+- The HTTP DTO and application input remain separate; the Gin handler is the explicit mapping point.
+- Amount representation is independent of 32-bit versus 64-bit architecture.
 - Show the connected success path and at least one relevant failure path in the PR discussion. A short explanation or demonstration is enough; no learner-written test suite or document is required.
 
 ## Scope
 
-This grouping keeps the original Go requirements. Database content below is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
+This grouping keeps the original Go requirements. Database content in this assignment is coaching only; no SQL or database code is added to these legacy goals. Keep existing exclusions. Do not add real money movement, processor calls, or financial-domain logic.
 
 Routine tests and documentation are reviewer-owned.
 
@@ -61,7 +111,6 @@ Routine tests and documentation are reviewer-owned.
 - Earlier learning: Builds on JSON binding, body limits, reference cleanup, and the application interface.
 - Later use: Later SQL columns must receive the same accepted values. SQL parameters keep values separate from query text.
 
-Words used here: DTO: the struct used to read or write HTTP data. Normalization: changing accepted input to one agreed form.
 
 ## Software And Design Principle
 
@@ -129,7 +178,7 @@ Search `Go json Decoder trailing data`, `Go int int64 conversion`, and `DTO appl
 
 Look up the concept, inspect the relevant project code, then make your own implementation decision. Hints are not a complete solution.
 
-For discussion, any programming language, pseudocode, or diagram is accepted. QOD revisits earlier work; the interview examples explore different scenarios. [How learning answers are reviewed](../../learning-and-interview-guide.md).
+Reply in your own words in the PR discussion. Any programming language, pseudocode, or diagram is welcome. [Answer guidance](../../learning-and-interview-guide.md).
 
 </details>
 

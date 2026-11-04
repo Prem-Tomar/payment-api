@@ -1,5 +1,22 @@
 # Learning And Review Rules
 
+- Before starting each batch of issue creation, updates, or replacements, read this entire
+  file and `docs/learning-and-interview-guide.md`, then inspect the current inventory and
+  relevant learner answers. Apply every agreed rule, not only the latest correction.
+  Read the full rules once before that batch, regardless of its size (1, 10, 20, or any
+  other number), not once per issue. Repeat the full check before the next batch.
+  Creating one issue alone counts as a batch. Apply the rules to every issue and read each
+  saved GitHub body back before reporting completion. If the user changes a rule during
+  the batch, incorporate it into all affected issues in that batch. These rules apply to
+  all current and future learning assignments; a template does not replace the rule check.
+- Teach unfamiliar concepts before asking the learner to use them in requirements,
+  diagrams, research hints, QOD, interview practice, or PR feedback. Provide an in-place
+  explanation with a labelled visual, a worked example or execution trace, a common failure,
+  and what/why/where it is useful. Connect earlier learning and later use. A glossary at the
+  end or a link to read elsewhere is insufficient. Supplementary references may deepen the
+  lesson. Teach the mechanism in depth without providing the complete assigned solution.
+  Apply this to existing tasks too. Do not add a new quiz, progression gate, or implementation
+  requirement merely to enforce teaching. Keep these mentor rules out of learner task bodies.
 - Learner assignments deliver a connected result in the real code path. At this stage,
   combine 2-4 related goals rather than assigning one helper or type at a time.
   Reviewers own routine tests and documentation; do not add these as learner requirements.

@@ -9,8 +9,18 @@ assignees: vishaltomar004
 
 Describe one connected implementation outcome, built from 2-4 related parts.
 
+## Learn Before Building
+
+Teach each unfamiliar concept before requirements, diagrams, or questions use it.
+For each concept include: a plain-language definition, labelled visual, worked example or
+execution trace, common failure, and what/why/where it is useful. Explain earlier and later
+connections. Use examples that teach the mechanism without solving the assigned task.
+Supplementary links deepen the lesson; they do not replace it. These lesson examples are
+explanations, not additional assigned questions or implementation deliverables.
+
 ## Picture First
 
+Use familiar words in this first picture. Teach unfamiliar labels before introducing them.
 Replace this sketch with a diagram for the actual task. Add a one-line text explanation.
 
 ```mermaid
@@ -26,7 +36,10 @@ Name only the real prerequisites. Do not make a database starter wait for unrela
 
 Explain what the concept is, why it matters, and where it belongs.
 Connect earlier implemented concepts and preview a useful later application.
-Define unfamiliar terms without requiring future knowledge.
+Before the implementation request uses a new concept, teach its mechanism here with a
+labelled visual, a worked example or execution trace, and a common failure. Define terms
+beside their first use. Links and end-of-task glossaries do not replace this teaching.
+Teach enough to reason independently without supplying the complete assigned solution.
 
 ## Implementation Task
 

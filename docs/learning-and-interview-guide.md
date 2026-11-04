@@ -5,7 +5,8 @@ flowchart LR
   A["Build a connected result"] --> B["See a picture"] --> C["Explain the behavior"] --> D["Try a changed case"]
 ```
 
-Read left to right. Build, explain, then apply the idea in a different situation.
+Teach unfamiliar concepts with pictures and examples before implementation begins.
+Then build, explain, and apply the idea in a different situation.
 
 ## Larger Implementation Assignments
 
@@ -90,8 +91,28 @@ G65 can begin now because the store interface and scoped lookup already exist.
 Read [the SQL guide](sql-learning-guide.md) and [the principle guide](software-design-principles.md).
 Explain what, why, and where. Use a principle to discuss a real design choice, not to require a class hierarchy.
 
-## Before Publishing A Task
+For transferable API-design coverage and a later complete assessment, use the
+[API contract roadmap](api-contract-transfer-guide.md). It distinguishes taught foundations
+from a full exercise that still needs to be assessed. Do not add future coding scope to a
+current issue merely to claim coverage.
 
+## Before Starting Each Batch
+
+- Read the complete `AGENTS.md`, this guide, the current inventory, and relevant earlier
+  learner answers once before each batch of issue creation, updates, or replacements.
+  Batch size is unrestricted: 1, 10, 20, or any other number of issues needs one full rule
+  check before starting, not one read per issue. Repeat the full check before the next
+  batch; a single issue also counts as a batch. Apply the whole rule
+  set to every issue. Incorporate any rule changes made during the batch into all affected
+  issues. The same rules apply to current tasks.
+
+## Check Every Issue Before Completing The Batch
+
+- Audit unfamiliar concepts in diagrams, requirements, hints, QOD, and interview problems.
+  Before asking the learner to use a concept, teach it in place with a labelled picture,
+  a worked example or trace, a common failure, and what/why/where it is useful. A glossary
+  or external reading link alone is insufficient. References may add depth. Do not provide
+  the complete assigned implementation or introduce another quiz or gate.
 - Confirm it has 2-4 connected parts and observable integrated behavior.
 - Include a real QOD, not a placeholder.
 - Include one interview problem with its own picture; do not duplicate QOD.
