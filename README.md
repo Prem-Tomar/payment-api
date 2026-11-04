@@ -60,6 +60,15 @@ In bash or zsh:
 gofmt -w $(git ls-files '*.go')
 ```
 
+## Learning And Coaching
+
+Every new learning issue and successor issue includes a concrete Question of the Day
+using the [learning task template](.github/ISSUE_TEMPLATE/learning-task.md).
+Questions revisit earlier implementation work and connect it to system-design purpose,
+component placement, and future applications. Answers belong in the relevant PR discussion.
+Learning follow-ups are non-blocking; implementation defects remain review findings.
+See [AGENTS.md](AGENTS.md) for the full coaching and review rules.
+
 ## Current Status
 
 The repo currently has a Gin service foundation in progress through the G9 learning scope:

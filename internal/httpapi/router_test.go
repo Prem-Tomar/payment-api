@@ -3,6 +3,8 @@ package httpapi
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -104,8 +106,12 @@ func TestPaymentIntentErrorCodes(t *testing.T) {
 		code string
 	}{
 		{name: "malformed JSON", body: `{"amount":`, code: "INVALID_REQUEST"},
-		{name: "invalid amount", body: `{"amount":0,"currency":"USD","payment_method":"card","merchant_ref":"order-1"}`, code: "VALIDATION_ERR"},
-		{name: "blank merchant reference", body: `{"amount":100,"currency":"USD","payment_method":"card","merchant_ref":"   "}`, code: "VALIDATION_ERR"},
+		{name: "invalid amount", body: `{"amount":0,"currency":"USD","payment_method":"card","merchant_ref":"order-1"}`, code: "INVALID_AMOUNT"},
+		{name: "blank merchant reference", body: `{"amount":100,"currency":"USD","payment_method":"card","merchant_ref":"   "}`, code: "INVALID_REFERENCE"},
+		{name: "missing currency", body: `{"amount":100,"payment_method":"card","merchant_ref":"order-1"}`, code: "INVALID_CURRENCY"},
+		{name: "malformed currency", body: `{"amount":100,"currency":"12$","payment_method":"card","merchant_ref":"order-1"}`, code: "INVALID_CURRENCY"},
+		{name: "unsupported method", body: `{"amount":100,"currency":"USD","payment_method":"cash","merchant_ref":"order-1"}`, code: "INVALID_PAYMENT_METHOD"},
+		{name: "overlong reference", body: `{"amount":100,"currency":"USD","payment_method":"card","merchant_ref":"` + strings.Repeat("x", 101) + `"}`, code: "INVALID_REFERENCE"},
 	}
 
 	for _, tt := range tests {
@@ -131,6 +137,75 @@ func TestPaymentIntentErrorCodes(t *testing.T) {
 				t.Fatalf("expected code %q, got %q", tt.code, response.Code)
 			}
 		})
+	}
+}
+
+type createPaymentIntentFunc func(context.Context, application.CreatePaymentIntentInput) (application.CreatePaymentIntentResult, error)
+
+func (f createPaymentIntentFunc) CreatePaymentIntent(ctx context.Context, input application.CreatePaymentIntentInput) (application.CreatePaymentIntentResult, error) {
+	return f(ctx, input)
+}
+
+func TestCreatePaymentIntentApplicationErrorMapping(t *testing.T) {
+	tests := []struct {
+		name   string
+		err    error
+		status int
+		code   string
+	}{
+		{name: "canceled", err: context.Canceled, status: 499, code: "REQUEST_CANCELED"},
+		{name: "wrapped canceled", err: fmt.Errorf("use case: %w", context.Canceled), status: 499, code: "REQUEST_CANCELED"},
+		{name: "deadline", err: context.DeadlineExceeded, status: http.StatusGatewayTimeout, code: "GATEWAY_TIMEOUT"},
+		{name: "wrapped deadline", err: fmt.Errorf("use case: %w", context.DeadlineExceeded), status: http.StatusGatewayTimeout, code: "GATEWAY_TIMEOUT"},
+		{name: "not implemented", err: application.ErrNotImplemented, status: http.StatusNotImplemented, code: "NOT_IMPLEMENTED"},
+		{name: "internal failure", err: errors.New("private failure detail"), status: http.StatusInternalServerError, code: "INTERNAL_ERROR"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gin.SetMode(gin.TestMode)
+			router := gin.New()
+			router.POST("/payment-intents", createPaymentIntentHandler(createPaymentIntentFunc(func(context.Context, application.CreatePaymentIntentInput) (application.CreatePaymentIntentResult, error) {
+				return application.CreatePaymentIntentResult{}, tt.err
+			})))
+			req := httptest.NewRequest(http.MethodPost, "/payment-intents", strings.NewReader(`{"amount":100,"currency":"USD","payment_method":"card","merchant_ref":"order-1"}`))
+			rec := httptest.NewRecorder()
+			router.ServeHTTP(rec, req)
+			if rec.Code != tt.status {
+				t.Fatalf("expected status %d, got %d", tt.status, rec.Code)
+			}
+			var response struct {
+				Code string `json:"code"`
+			}
+			decoder := json.NewDecoder(rec.Body)
+			if err := decoder.Decode(&response); err != nil {
+				t.Fatal(err)
+			}
+			if response.Code != tt.code {
+				t.Fatalf("expected code %q, got %q", tt.code, response.Code)
+			}
+			if err := decoder.Decode(&struct{}{}); err != io.EOF {
+				t.Fatalf("expected exactly one JSON response, got trailing response data: %v", err)
+			}
+		})
+	}
+}
+
+func TestCreatePaymentIntentNormalizesInput(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.New()
+	called := false
+	router.POST("/payment-intents", createPaymentIntentHandler(createPaymentIntentFunc(func(_ context.Context, input application.CreatePaymentIntentInput) (application.CreatePaymentIntentResult, error) {
+		called = true
+		if input.Currency != "USD" || input.MerchantRef != "order-1" || input.CustomerRef != "customer-1" {
+			t.Errorf("unexpected application input: %+v", input)
+		}
+		return application.CreatePaymentIntentResult{ID: "placeholder"}, nil
+	})))
+	req := httptest.NewRequest(http.MethodPost, "/payment-intents", strings.NewReader(`{"amount":100,"currency":" usd ","payment_method":"card","merchant_ref":" order-1 ","customer_ref":" customer-1 "}`))
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if !called {
+		t.Fatalf("use case not called: %d %s", rec.Code, rec.Body.String())
 	}
 }
 
