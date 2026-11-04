@@ -21,7 +21,7 @@ Read left to right: Go configuration -> Managed SQL pool -> PostgreSQL table -> 
 
 ## Start And Dependencies
 
-Ready to start now. Reuse the completed store interface and merchant-scoped lookup. You do not need to finish every queued HTTP task first.
+Start connection/schema work now using the existing store interface and merchant-scoped lookup. You do not need to finish every queued HTTP task first. Finish the shared duplicate-record contract in the identity-safety assignment before claiming full adapter substitution.
 
 ## Implementation Parts
 

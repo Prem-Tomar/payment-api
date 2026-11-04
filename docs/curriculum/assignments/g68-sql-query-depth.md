@@ -78,16 +78,16 @@ Previously learned concepts: Builds on SQL insert/select, scoped records, linked
 
 ```mermaid
 flowchart LR
-  N0["No base row"]
-  N1["Not found"]
-  N2["Matched row with NULL"]
+  N0["Scoped record ID"]
+  N1["Different merchant"]
+  N2["No public record"]
   N0 --> N1
   N1 --> N2
 ```
 
-Read left to right: No base row -> Not found -> Matched row with NULL.
+Read left to right: Scoped record ID -> Different merchant -> No public record.
 
-A prior query finds no row and returns a not-found result. A LEFT JOIN can instead produce a row with missing columns. Why are these different cases for a Go result mapper?
+A scoped lookup finds no row for merchant A, while merchant B has the same local ID. Why must the earlier lookup contract not fall back to a global search? Explain the difference between a missing scoped record and missing merchant identity.
 
 Explain in your own words. Use short sentences, bullets, or a small sketch. We assess the reasoning, not English grammar.
 

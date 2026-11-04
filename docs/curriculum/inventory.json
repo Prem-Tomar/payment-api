@@ -84,25 +84,25 @@
   "database": [
     {
       "day": "G65",
-      "issue": null,
+      "issue": 78,
       "guide": "docs/curriculum/assignments/g65-postgres-store.md",
       "activeLevel": "Small"
     },
     {
       "day": "G66",
-      "issue": null,
+      "issue": 79,
       "guide": "docs/curriculum/assignments/g66-sql-runtime.md",
       "activeLevel": "Small"
     },
     {
       "day": "G67",
-      "issue": null,
+      "issue": 80,
       "guide": "docs/curriculum/assignments/g67-atomic-retries.md",
       "activeLevel": "Small"
     },
     {
       "day": "G68",
-      "issue": null,
+      "issue": 81,
       "guide": "docs/curriculum/assignments/g68-sql-query-depth.md",
       "activeLevel": "Small"
     }

@@ -28,10 +28,10 @@ Do not repeat work already accepted; identify the remaining source goals in the 
 
 | Day | Start rule | Guide |
 | --- | --- | --- |
-| G65 | Ready to start now. Reuse the completed store interface and merchant-scoped lookup. You do not need to finish every queued HTTP task first. | [G65: Build a working PostgreSQL store](assignments/g65-postgres-store.md) |
-| G66 | Start after G65. Fix the request-lifetime assignment's malformed deadline response before enabling real query calls in HTTP. | [G66: Integrate the SQL store with service lifecycle and errors](assignments/g66-sql-runtime.md) |
-| G67 | Start after G65 and the identity-safety assignment. Use request metadata already carried into the application. G66 is needed before HTTP wiring. | [G67: Add atomic learning records and safe retry identity in SQL](assignments/g67-atomic-retries.md) |
-| G68 | Start after G67. Use only synthetic/local learning records. A query plan is database work to inspect, not a number to guess. | [G68: Build and explain useful SQL queries](assignments/g68-sql-query-depth.md) |
+| [G65 / #78](https://github.com/Prem-Tomar/payment-api/issues/78) | Start connection/schema work now using the existing store interface and merchant-scoped lookup. Finish the shared duplicate-record contract before claiming full adapter substitution. | [G65: Build a working PostgreSQL store](assignments/g65-postgres-store.md) |
+| [G66 / #79](https://github.com/Prem-Tomar/payment-api/issues/79) | Start after G65. Fix the request-lifetime assignment's malformed deadline response before enabling real query calls in HTTP. | [G66: Integrate the SQL store with service lifecycle and errors](assignments/g66-sql-runtime.md) |
+| [G67 / #80](https://github.com/Prem-Tomar/payment-api/issues/80) | Start after G65 and the identity-safety assignment. Use request metadata already carried into the application. G66 is needed before HTTP wiring. | [G67: Add atomic learning records and safe retry identity in SQL](assignments/g67-atomic-retries.md) |
+| [G68 / #81](https://github.com/Prem-Tomar/payment-api/issues/81) | Start after G67. Use only synthetic/local learning records. A query plan is database work to inspect, not a number to guess. | [G68: Build and explain useful SQL queries](assignments/g68-sql-query-depth.md) |
 
 G65 can begin now. Its first connection/schema work does not wait for every current HTTP assignment.
 Finish the shared duplicate-record contract before claiming store substitutability. Fix request-lifetime
