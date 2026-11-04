@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-11-05",
+  "policy": {
+    "delivery": "2-4 connected implementation goals",
+    "interviewActiveLevel": "Small",
+    "promotion": "Learner explains the simpler case and an edge case with little help and feels comfortable",
+    "language": "Plain English; technical depth retained",
+    "feedback": "Visual-first; one focused action",
+    "sourceClosureReason": "Superseded, not achieved",
+    "databaseStart": "G65 can begin now with the existing storage boundary"
+  },
+  "assignments": [
+    {
+      "key": "request-input",
+      "issue": 64,
+      "sourceIssues": [
+        64,
+        66,
+        75
+      ],
+      "guide": "docs/curriculum/assignments/request-input.md",
+      "activeLevel": "Small"
+    },
+    {
+      "key": "public-errors",
+      "issue": 70,
+      "sourceIssues": [
+        70,
+        71,
+        74,
+        76
+      ],
+      "guide": "docs/curriculum/assignments/public-errors.md",
+      "activeLevel": "Small"
+    },
+    {
+      "key": "honest-output",
+      "issue": 60,
+      "sourceIssues": [
+        20,
+        46,
+        60,
+        62
+      ],
+      "guide": "docs/curriculum/assignments/honest-output.md",
+      "activeLevel": "Small"
+    },
+    {
+      "key": "application-lifetime",
+      "issue": 59,
+      "sourceIssues": [
+        55,
+        56,
+        58,
+        59
+      ],
+      "guide": "docs/curriculum/assignments/application-lifetime.md",
+      "activeLevel": "Small"
+    },
+    {
+      "key": "identity-safety",
+      "issue": 65,
+      "sourceIssues": [
+        61,
+        65,
+        72,
+        73
+      ],
+      "guide": "docs/curriculum/assignments/identity-safety.md",
+      "activeLevel": "Small"
+    },
+    {
+      "key": "runtime-guards",
+      "issue": 51,
+      "sourceIssues": [
+        51,
+        77
+      ],
+      "guide": "docs/curriculum/assignments/runtime-guards.md",
+      "activeLevel": "Small"
+    }
+  ],
+  "database": [
+    {
+      "day": "G65",
+      "issue": null,
+      "guide": "docs/curriculum/assignments/g65-postgres-store.md",
+      "activeLevel": "Small"
+    },
+    {
+      "day": "G66",
+      "issue": null,
+      "guide": "docs/curriculum/assignments/g66-sql-runtime.md",
+      "activeLevel": "Small"
+    },
+    {
+      "day": "G67",
+      "issue": null,
+      "guide": "docs/curriculum/assignments/g67-atomic-retries.md",
+      "activeLevel": "Small"
+    },
+    {
+      "day": "G68",
+      "issue": null,
+      "guide": "docs/curriculum/assignments/g68-sql-query-depth.md",
+      "activeLevel": "Small"
+    }
+  ]
+}
+

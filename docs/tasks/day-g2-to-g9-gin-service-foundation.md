@@ -79,3 +79,55 @@ invalid values before accepting traffic.
 | `HEADER_TIMEOUT` | `5s` | Maximum time to read request headers. |
 
 Invalid ports and invalid timeout values should fail before the server starts.
+
+## Current Coaching Companion
+
+This foundation remains the earlier implementation scope. Database content here is a preview,
+not an extra requirement. Read [the current learning guide](../learning-and-interview-guide.md).
+
+```mermaid
+flowchart LR
+  A["Request"] --> B["Middleware"] --> C["Handler"] --> D["Status and log"]
+```
+
+Middleware does work shared by routes. A handler owns its route's response. Construction code
+creates shared dependencies. This connects Single Responsibility and Creator responsibility to
+the server code already learned. Creator asks who has the information to create a dependency.
+
+### Question Of The Day And Small Practice
+
+```mermaid
+flowchart LR
+  A["Bad configuration"] --> B["Startup"] --> C["Accept traffic?"]
+```
+
+Why should an invalid timeout or port fail during startup? How does that protect later requests?
+Use the existing configuration and lifecycle code in your explanation.
+
+<details>
+<summary>Moderate preview - not active</summary>
+
+```mermaid
+flowchart LR
+  A["Public traffic is limited"] --> B["Health still runs"] --> C["Readiness checks dependency"]
+```
+
+Why do public traffic, health, and readiness need different boundaries?
+
+</details>
+
+<details>
+<summary>Strong preview - not active</summary>
+
+```mermaid
+flowchart LR
+  A["Shutdown starts"] --> B["In-flight requests"] --> C["Time budget"] --> D["Close future SQL pool"]
+```
+
+Later, the server owns a shared SQL pool. Explain resource ownership during shutdown after
+the learner is comfortable with the earlier request and server lifetime concepts.
+
+</details>
+
+Small is active; later levels depend on comfort, not a day number. The actual database track
+starts at G65 in [the inventory](../curriculum/index.md). No database code is added to G2-G9.

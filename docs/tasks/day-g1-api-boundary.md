@@ -71,3 +71,55 @@ Create a minimal Go service skeleton with health and readiness endpoints only.
 
 Day G2 should still avoid payment creation. Its job is to establish layout, basic routing,
 configuration loading shape, graceful shutdown, and validation tooling.
+
+## Current Coaching Companion
+
+This is a historical scope document. Do not reopen it as a new documentation assignment.
+Current learning is implementation-led; routine documentation and tests are reviewer-owned.
+
+```mermaid
+flowchart LR
+  A["Client input"] --> B["Go transport rules"] --> C["Domain contract"] --> D["Public result"]
+```
+
+Go accepts and translates requests. Domain code owns financial truth. Later SQL storage keeps
+operational metadata; it does not make the database the financial-rule owner.
+Single Responsibility means keeping these different reasons to change separate.
+
+### Question Of The Day And Small Practice
+
+```mermaid
+flowchart LR
+  A["Well-formed request"] --> B["Domain rule rejects it"] --> C["Client response"]
+```
+
+Why can a request be valid JSON but still be rejected by the domain? Name the component that
+should decide each case. Answer in short sentences or a sketch; English grammar is not scored.
+
+<details>
+<summary>Moderate preview - not active</summary>
+
+```mermaid
+flowchart LR
+  A["HTTP caller"] --> B["One application contract"] --> C["Local caller"]
+```
+
+How could both callers reuse one use case without requiring the local caller to know Gin?
+
+</details>
+
+<details>
+<summary>Strong preview - not active</summary>
+
+```mermaid
+flowchart LR
+  A["API server"] --> B["Stored metadata"] --> C["Domain truth"] --> D["Retry after failure"]
+```
+
+Later, a reply is lost. Which component knows whether work happened? Introduce that failure
+scenario only after the learner understands the simpler ownership boundaries.
+
+</details>
+
+Follow [the learning guide](../learning-and-interview-guide.md) for visual-first feedback and
+[the inventory](../curriculum/index.md) for active implementation assignments.

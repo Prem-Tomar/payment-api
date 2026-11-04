@@ -69,11 +69,19 @@ component placement, and future applications. Answers belong in the relevant PR 
 Learning follow-ups are non-blocking; implementation defects remain review findings.
 See [AGENTS.md](AGENTS.md) for the full coaching and review rules.
 
+The [learning inventory](docs/curriculum/index.md) groups related goals into larger assignments.
+Technical coaching is visual-first and uses plain English. Small interview exercises are active;
+Moderate and Strong exercises are previews until the learner is comfortable. Read the
+[coaching guide](docs/learning-and-interview-guide.md),
+[software-design principle guide](docs/software-design-principles.md), and
+[SQL learning guide](docs/sql-learning-guide.md).
+
 ## Current Status
 
-The repo currently has a Gin service foundation in progress through the G9 learning scope:
-server lifecycle, health/readiness routes, request ID middleware, access logging, JSON helpers,
-method handling, body-size guarding, and environment-based runtime configuration.
+The Gin implementation through G47 is under review in PR #63. Current learning work is grouped
+in the inventory above. G65 starts a PostgreSQL adapter using the existing store boundary;
+later database tasks depend on that working adapter. The curriculum update itself does not
+implement learner-owned SQL or application behavior.
 
 The first task is documented in [docs/tasks/day-g1-api-boundary.md](docs/tasks/day-g1-api-boundary.md).
 The current Gin service foundation is documented in

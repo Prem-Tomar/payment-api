@@ -42,6 +42,11 @@ Rust should handle:
 
 ## Coaching Style For This Repo
 
+Current coaching rules are in [the learning guide](learning-and-interview-guide.md).
+Use diagrams before long explanations, common English, and larger connected implementation
+assignments. Questions revisit prior work. Interview difficulty starts Small and rises only
+with demonstrated comfort. See [the current inventory](curriculum/index.md).
+
 Use the same learning style as the Rust track:
 
 - Start with the goal and real systems problem.
@@ -64,6 +69,10 @@ Do not add these until explicitly scoped:
 - generated OpenAPI contracts.
 - container or Kubernetes deployment.
 - Rust FFI, WASM, or sidecar integration.
+
+G65 now explicitly scopes local PostgreSQL connection, schema, and store-adapter learning.
+This exception applies to the database assignments, not to earlier Go task acceptance criteria.
+Operational metadata may be stored in SQL; the Rust/domain ownership above remains unchanged.
 
 ## First Implementation Direction
 
